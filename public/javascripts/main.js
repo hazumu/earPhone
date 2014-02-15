@@ -31,14 +31,51 @@ $(function() {
 
     var ImageManager = {
         images: {
-                neru:  "neru.jpg", 
                 natsu: "natsu.jpg",
                 ame:   "ame.jpg",
-                yotei: "yotei.jpg"
+                yotei: "yotei.jpg",
+                neru:  "neru.jpg"
         },
         path: "/images/",
         show: function(cmd) {
             $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
+        },
+        render: function () {
+            var html = "";
+            for (var i in ImageManager.images) {
+                html += '<li><img src=' + ImageManager.path + ImageManager.images[i] + ' /></li>';
+            }
+            var nextX = $("#imgWrap").width();
+            $("#imgWrap ul")
+                .html(html)
+                .css({
+                    "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
+                    "opacity" : 1
+                });
+            /*
+                .on("webkitTransitionEnd", function() {
+                    $("#imgWrap ul").off("webkitTransitionEnd")
+                    .css({
+                        "-webkit-transform" : "translate(0px, 0px)",
+                    })
+                });
+            */
+        },
+        slide: function(cmd) {
+            var pos = 0;
+            var i = 0;
+            for (var key in ImageManager.images) {
+                if (cmd === key) {
+                    break;
+                }
+                i++;
+            }
+
+            pos = $(window).width() * i;
+
+            $("#imgWrap ul").css({
+                    "-webkit-transform" : "translate(-" + pos + "px, 0px)",
+                });
         }
     };
 
@@ -51,11 +88,16 @@ $(function() {
             $("#start").on("click", function() {
                 if (!startBtn.isStart) {
                     $(this)
-                         .addClass("on")
-                         .html("STOP");
+                         .addClass("on down")
+                         .removeClass("up")
+                         .html("STOP")
+                         .on("webkitTransitionEnd", function(){
+                            ImageManager.render();
+                         });
                 } else {
                     $(this)
-                         .removeClass("on")
+                         .removeClass("on down")
+                         .addClass("up")
                          .html("START");
                 }
                 startBtn.isStart = !startBtn.isStart;
@@ -75,7 +117,8 @@ $(function() {
         onSocketData : function(e, data) {
             console.log("受信", data);
             // 画像表示
-            ImageManager.show(data);
+            // ImageManager.show(data);
+            ImageManager.slide(data);
             // ina_job実装部分
             // data => ame || natsu || yotei || neru
         }
