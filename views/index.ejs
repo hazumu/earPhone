@@ -335,11 +335,11 @@ $(function(){
   var guitarMelody = [
     {tones:[0,1,2]},
     {tones:[0,1,2]},
-    {tones:[0,1,2]},
+    {tones:[0]},
+    {tones:[1]},
+    {tones:[2]},
     {tones:[]},
     {tones:[0,1,2]},
-    {tones:[]},
-    {tones:[]},
     {tones:[]},
   ];
 
@@ -390,9 +390,9 @@ $(function(){
         n = toneNameMap[nowChord.root];
         if(n8)n8.noteOff(0);
         if(n9)n9.noteOff(0);
-        v = 0.6;
-        n8 = oscTone(tone[baseMagic[n%7]], v, 0);
-        n9 = oscTone(tone[baseMagic[n%7]]/2, v, 0);
+        v = 2;
+        n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0);
+        n9 = oscTone(tone[baseMagic[n%7]]*4, v, 0);
  
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
@@ -412,12 +412,12 @@ $(function(){
 
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
-        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 2, v, 0);}
-        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 2, v, 0);}
-        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 2, v, 0);}
+        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 4, v, 1);}
+        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 4, v, 1);}
+        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 4, v, 1);}
         if(n4==null && inArray(guitarMelody[rpos].tones,3)){
           if(cs.length >= 4){
-            n4 = oscTone(tone[(n + cs[3])%7] * 2, v); // 7th
+            n4 = oscTone(tone[(n + cs[3])%7] * 4, v); // 7th
           }
         }
 
@@ -460,7 +460,6 @@ $(function(){
  
         if(restToneLen != 0)restToneLen --;
  
-        playDrumsPattern(t, "basic");
 
         if(Math.abs(speed - targetSpeed) > 0.001){
           speed += (targetSpeed - speed)/10;
