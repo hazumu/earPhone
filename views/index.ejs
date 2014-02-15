@@ -15,6 +15,10 @@ $(function(){
       kick: "sounds/kick.wav",
       snare: "sounds/snare.wav",
       hihat: "sounds/hihat_real.mp3",
+      hightam: "sounds/Tom_Kit_02.wav",
+      lowtam: "sounds/Tom_01.wav",
+      floor: "sounds/Floor_02.wav",
+      crash: "sounds/Crash_02.wav",
   };
   var soundBuffers;
   var soundPattern = {
@@ -125,7 +129,6 @@ $(function(){
       ["hihat"],
       [],
     ],
-
     liver: [
       // 16拍用意する
       ["hihat", "kick"],
@@ -162,6 +165,77 @@ $(function(){
       ["hihat"],
       [],
     ],
+    filet: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["hightam"],
+      [],
+      ["hightam"],
+      [],
+      ["lowtam", "kick"],
+      [],
+      ["lowtam"],
+      [],
+      ["floor"],
+      [],
+      ["floor"],
+      [],
+    ],
+    rib: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["crash"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    ],
+
   };
 
   var BL = new BufferLoader(context, storeSound);
@@ -421,9 +495,11 @@ $(function(){
       }
 
       //playDrumsPattern(t, "basic");
-      playDrumsPattern(t, "araya");
+      //playDrumsPattern(t, "araya");
       //playDrumsPattern(t, "heart");
       //playDrumsPattern(t, "liver");
+      playDrumsPattern(t, "filet");
+      //playDrumsPattern(t, "rib");
 
       t ++;
       setTimeout(tick, speed);
