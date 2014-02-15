@@ -15,6 +15,8 @@ $(function(){
       kick: "sounds/kick.wav",
       snare: "sounds/snare.wav",
       hihat: "sounds/hihat_real.mp3",
+      base: "sounds/BaseA.mp3",
+      hguitar: "sounds/high_guitar_a.mp3",
   };
   var soundBuffers;
   var soundPattern = {
@@ -166,7 +168,7 @@ $(function(){
 
   var BL = new BufferLoader(context, storeSound);
   BL.load(soundList);
-
+/*
   function oscTone(freq, vol, type){
     if(vol == undefined){
       vol = 1;
@@ -193,6 +195,40 @@ $(function(){
 
     return oscillator
   }
+*/
+  function oscTone(freq, vol, type, atype){
+    if(vol == undefined){
+      vol = 1;
+    }
+    if(type == undefined){
+      type = 0;
+    }
+    //var oscillator = context.createOscillator();
+    var buffer = soundBuffers[atype],
+        source = context.createBufferSource();
+    source.buffer = buffer;
+ 
+    var eg = context.createGainNode();
+    //eg.gain.linearRampToValueAtTime(1, 0.1);
+    source.connect(eg);
+    eg.connect(context.destination);
+    //console.log(eg);
+
+    //oscillator.type = type;
+    //oscillator.frequency.value = freq;
+    source.playbackRate.value = freq/440;
+    //oscillator.connect(context.destination);
+    source.noteOn(0);
+
+    var t0 = context.currentTime;
+    //eg.gain.value= 0;
+    eg.gain.setValueAtTime(vol, t0);
+    eg.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
+    //eg.gain.linearRampToValueAtTime(0, t0 + 2);
+
+    return source
+  }
+
   var baseTone = [  // 半音の周波数
     261.62,  // C   0
     277.18,  // C#  1
@@ -246,7 +282,7 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0, speed: 1000/8},
+    {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4)},
 
     // rainy
     {root:'e',scale: 'm', base:0},
@@ -256,7 +292,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000/12},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(120/4*8*4)},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -265,7 +301,7 @@ $(function(){
     {root:'g',scale: 'M', base:3},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M', base:0},
-    {root:'g',scale: 'M7', base:0, speed: 1000/4},
+    {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4)},
   
     // sleep
     {root:'c',scale: 'M', base:0},
@@ -335,11 +371,11 @@ $(function(){
   var guitarMelody = [
     {tones:[0,1,2]},
     {tones:[0,1,2]},
-    {tones:[0]},
-    {tones:[1]},
-    {tones:[2]},
     {tones:[]},
-    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[]},
+    {tones:[]},
+    {tones:[]},
     {tones:[]},
   ];
 
@@ -372,11 +408,12 @@ $(function(){
   // rythm上の位置
   rpos = 0;
 
-  targetSpeed = speed = 1000/16;
+  targetSpeed = speed = 1000 * 60/(120/4*8*4);
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
     function tick(){
+      var currentTime = context.currentTime;
       if(t % 32 == 0){  // 小節？
         nowChord = chordScore[cpos];
         console.log(nowChord);
@@ -390,9 +427,9 @@ $(function(){
         n = toneNameMap[nowChord.root];
         if(n8)n8.noteOff(0);
         if(n9)n9.noteOff(0);
-        v = 2;
-        n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0);
-        n9 = oscTone(tone[baseMagic[n%7]]*4, v, 0);
+        v = 1;
+        n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0, 'base');
+        //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
  
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
@@ -401,28 +438,28 @@ $(function(){
       }
 
       if (t % 4 === 0) {
-        if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
-        if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
-        if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
-        if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
+        if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(currentTime + 3);n1 = null;}
+        if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(currentTime + 3);n2 = null;}
+        if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(currentTime + 3);n3 = null;}
+        if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(currentTime + 3);n4 = null;}
 
-        var v = 1;
+        var v = 3;
         var n;
         n = toneNameMap[nowChord.root];
 
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
-        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 4, v, 1);}
-        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 4, v, 1);}
-        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 4, v, 1);}
+        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 1, 'hguitar');}
+        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 1, 'hguitar');}
+        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 1, 'hguitar');}
         if(n4==null && inArray(guitarMelody[rpos].tones,3)){
           if(cs.length >= 4){
-            n4 = oscTone(tone[(n + cs[3])%7] * 4, v); // 7th
+            n4 = oscTone(tone[(n + cs[3])%7] * 4, v, 1, 'hguitar'); // 7th
           }
         }
 
         if(restToneLen == 0){
-          if(n5)n5.noteOff(0);
+          if(n5)n5.noteOff(currentTime + 3);
           if(n6)n6.noteOff(0);
           if(n7)n7.noteOff(0);
           var v = 0.9;
@@ -442,9 +479,9 @@ $(function(){
             // todo: スケールをあわせる
             tn = randint(7) + n;
           }
-          n5 = oscTone(tone[tn] * 2, v, 0);
-          n6 = oscTone(tone[tn] * 4, v, 0);
-          n7 = oscTone(tone[tn] * 8, v, 0);
+          n5 = oscTone(tone[tn] * 2, v, 0, 'hguitar');
+          //n6 = oscTone(tone[tn] * 4, v, 0);
+          //n7 = oscTone(tone[tn] * 8, v, 0);
           restToneLen = melodyRythm[mpos].len;
 
           mpos ++;
@@ -484,8 +521,13 @@ $(function(){
     var buffer = soundBuffers[type],
         source = context.createBufferSource();
     source.buffer = buffer;
-    source.connect(context.destination);
+    var eg = context.createGainNode();
+    source.connect(eg);
+    eg.connect(context.destination);
+    var t0 = context.currentTime;
+    eg.gain.setValueAtTime(0.01, t0);
     source.noteOn(0);
+    source.noteOff(context.currentTime + 3);
   }
 
   function playDrumsPattern(tick, pattern) {
