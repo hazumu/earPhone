@@ -37,11 +37,17 @@ $(function() {
                 neru:  "neru.jpg"
         },
         path: "/images/",
+        preload: {
+            for (var i in ImageManager.images) {
+                var img = document.createElement("img");
+                img.src = ImageManager.path + ImageManager.images[i];
+            }
+        },
         show: function(cmd) {
             $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
         },
         clear: function() {
-            $("#imgWrap ul")
+            $("#imgList")
                 .empty()
                 .css({
                         "-webkit-transform" : "translate(0px, 0px)",
@@ -54,20 +60,12 @@ $(function() {
                 html += '<li><img src=' + ImageManager.path + ImageManager.images[i] + ' /></li>';
             }
             var nextX = $("#imgWrap").width();
-            $("#imgWrap ul")
+            $("#imgList")
                 .html(html)
                 .css({
                         "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
                         "opacity" : 1
                     });
-            /*
-                .on("webkitTransitionEnd", function() {
-                    $("#imgWrap ul").off("webkitTransitionEnd")
-                    .css({
-                        "-webkit-transform" : "translate(0px, 0px)",
-                    })
-                });
-            */
         },
         slide: function(cmd) {
             var pos = 0;
@@ -81,7 +79,7 @@ $(function() {
 
             pos = $(window).width() * i;
 
-            $("#imgWrap ul").css({
+            $("#imgList").css({
                     "-webkit-transform" : "translate(-" + pos + "px, 0px)",
                 });
         }
@@ -121,6 +119,7 @@ $(function() {
         init : function() {
             socket.init();
             startBtn.init();
+            ImageManager.preload();
             $(window).on(socket.ON_SOCKET_DATA, function(e, data) {
                 app.onSocketData(e, data);
             });
