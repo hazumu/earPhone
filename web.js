@@ -1,5 +1,6 @@
 var express = require("express"),
     routes = require('./routes'),
+    routeConsole = require('./routes/console'),
     socketIO = require('socket.io'),
     http = require('http'),
     path = require('path'),
@@ -19,6 +20,7 @@ app.configure(function(){
 });
 
 app.get('/', routes.index);
+app.get('/console', routeConsole.console);
 
 var server = http.createServer(app);
 console.log(app.get("port"));
