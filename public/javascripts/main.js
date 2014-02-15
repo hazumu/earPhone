@@ -29,6 +29,19 @@ $(function() {
         }
     };
 
+    var ImageManager = {
+        images: {
+                neru:  "neru.jpg", 
+                natsu: "natsu.jpg",
+                ame:   "ame.jpg",
+                yotei: "yotei.jpg"
+        },
+        path: "/images/",
+        show: function(cmd) {
+            $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
+        }
+    };
+
     var app = {
         init : function() {
             socket.init();
@@ -37,13 +50,14 @@ $(function() {
             });
         },
         onSocketData : function(e, data) {
-            console.log("受信", e, data);
+            console.log("受信", data);
+            // 画像表示
+            ImageManager.show(data);
             // ina_job実装部分
             // data => ame || natsu || yotei || neru
         }
     };
 
     app.init();
-
 });
 
