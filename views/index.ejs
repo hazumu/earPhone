@@ -568,6 +568,13 @@ $(function(){
     </div>
 </div>
 
+<div id="likeBtn">イイネ！</div>
+<script type="text/javascript">
+$("#likeBtn").click(function(){
+	$(this).toggleClass("on");
+});
+</script>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/main.js"></script>
 </body>
