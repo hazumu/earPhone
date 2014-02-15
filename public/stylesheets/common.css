@@ -2,16 +2,19 @@
 -------------------------------------------------- */
 body {
 	padding-top: 60px;
+	background-color: #FBEFF9;
 	color: #444;
 }
 
 .navbar-inner {
 	background-image: none;
+	background-color: #F097E3;
 	color: #FFF;
 }
 
 .navbar .brand {
 	text-shadow: none;
+	color: #FFF;
 }
 
 .breadcrumb {
@@ -116,4 +119,33 @@ body {
 		50%  { -webki-transform: rotate(180deg); opacity: 1.0;}
 		100% { -webkit-transform: rotate(360deg); opacity: 0.2;}
 	}
+}
+
+.wrapper{
+	text-align: center;
+}
+
+#start{
+	position: relative;
+	width: 180px;
+	height: 180px;
+	border-radius: 90px;
+	border: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	background:linear-gradient(#f3f3f3, #e6e6e6);
+	margin: 15px 0;
+}
+#start:after {
+	display: block;
+	content:"";
+	position: absolute;
+	top:7px;
+	left:7px;
+	width: 160px;
+	height: 160px;
+	border-radius: 80px;
+	border: 3px solid #ccc;
+}
+#start.on:after {
+	border-color: rgb(100,236,118);
 }

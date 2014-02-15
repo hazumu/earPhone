@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -232,6 +231,7 @@ $(function(){
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
+    $(this).toggleClass("on");
     function tick(){
       if(t % 8 == 0){  // 小節？
         nowChord = chordScore[cpos];
@@ -328,11 +328,7 @@ $(function(){
     }
   }
 });
-
 </script>
-<style>
-
-</style>
 
 <body>
 

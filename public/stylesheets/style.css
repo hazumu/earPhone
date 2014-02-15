@@ -124,3 +124,9 @@ img {
     }
 }
 
+#start{
+	width: 240px;
+	height: 240px;
+	border-radius: 120px;
+	background-color: green;
+}
