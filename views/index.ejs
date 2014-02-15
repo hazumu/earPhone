@@ -350,7 +350,7 @@ $(function(){
 
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0, drumType: "basic"},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -361,17 +361,17 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "basic"},
+    {root:'e',scale: 'm', base:0, drumType: "basic", theme: 'rainy'},
     {root:'d',scale: 'M', base:1},
     {root:'c',scale: 'M', base:0},
     {root:'b',scale:'m', base:3},
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(140/4*8*4), drumType: "filet"},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(100/4*8*4), drumType: "filet"},
  
     // alarm
-    {root:'g',scale: 'M', base:0, drumType: "araya"},
+    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm'},
     {root:'b',scale: 'M7', base:1},
     {root:'e',scale: 'm', base:0},
     {root:'g',scale: 'M', base:3},
@@ -380,7 +380,7 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "liver"},
+    {root:'c',scale: 'M', base:0, drumType: "liver", theme: 'sleep'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -504,15 +504,21 @@ var baseMelody = [
     function tick(){
       var currentTime = context.currentTime;
       if(t % 32 == 0){  // 小節？
+        if(cpos > chordScore.length){
+	  return; // 終了
+	}
         nowChord = chordScore[cpos];
         console.log(nowChord);
         root = randint(baseMagic.length);
         cpos ++;
         if(cpos >= chordScore.length){
-          cpos = 0;
+          //cpos = 0;
         }
 
 
+        if(nowChord.theme){
+	  themeCallback(nowChord.theme);
+	}
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
         }
@@ -530,13 +536,17 @@ var baseMelody = [
 
         var v;
         var n;
+
         n = toneNameMap[nowChord.root];
 
+        // ====================
+        //  BASE
+        // ====================
         if(n8 && (rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone)){
 	  n8.noteOff(0);
 	}
         if(n9)n9.noteOff(0);
-        v = 0.1;
+        v = 0.8;
         if(rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone){
           var cs = chord[nowChord.scale];
         //setTimeout(function(){
@@ -545,7 +555,11 @@ var baseMelody = [
 	}
 
         //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
-
+	
+        // ====================
+        //  MELO 
+        // ====================
+ 
 	v = 5;
  
         var cs = chord[nowChord.scale];
@@ -661,6 +675,11 @@ var baseMelody = [
         },0);
       }
     }
+  }
+
+  function themeCallback(theme){
+    // 
+    console.log('theme callback ' + theme);
   }
 });
 </script>
