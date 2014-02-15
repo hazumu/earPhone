@@ -17,6 +17,7 @@ $(function(){
       hihat: "sounds/hihat_real.mp3",
       base: "sounds/BaseA.mp3",
       hguitar: "sounds/high_guitar_a.mp3",
+      piano: "sounds/a_piano.wav",
   };
   var soundBuffers;
   var soundPattern = {
@@ -371,11 +372,11 @@ $(function(){
   var guitarMelody = [
     {tones:[0,1,2]},
     {tones:[0,1,2]},
-    {tones:[]},
-    {tones:[]},
-    {tones:[]},
-    {tones:[]},
-    {tones:[]},
+    {tones:[0]},
+    {tones:[1]},
+    {tones:[2]},
+    {tones:[1]},
+    {tones:[0]},
     {tones:[]},
   ];
 
@@ -478,7 +479,7 @@ $(function(){
           if(n5)n5.noteOff(currentTime + 3);
           if(n6)n6.noteOff(0);
           if(n7)n7.noteOff(0);
-          var v = 0.9;
+          var v = 8;
           var tn = 0;
           var cs = chord[nowChord.scale];
           if(Math.random() > 0.9 || true){ // きもいのでこれで
@@ -496,7 +497,7 @@ $(function(){
             tn = randint(7) + n;
           }
           //setTimeout(function(){
-            n5 = oscTone(tone[tn] * 2, v, 0, 'hguitar');
+            n5 = oscTone(tone[tn] * 2, v, 0, 'piano');
           //},0);
           //n6 = oscTone(tone[tn] * 4, v, 0);
           //n7 = oscTone(tone[tn] * 8, v, 0);
@@ -520,8 +521,8 @@ $(function(){
           speed += (targetSpeed - speed)/10;
         }
       }
-      //playDrumsPattern(t, "basic");
-      playDrumsPattern(t, "araya");
+      playDrumsPattern(t, "basic");
+      //playDrumsPattern(t, "araya");
       //playDrumsPattern(t, "heart");
       //playDrumsPattern(t, "liver");
 
@@ -546,7 +547,7 @@ $(function(){
     source.connect(context.destination);
     //var t0 = context.currentTime;
     //eg.gain.setValueAtTime(0.01, t0);
-    source.noteOn(0);
+    source.noteOn(0.0);
     source.noteOff(context.currentTime + 3);
   }
 
