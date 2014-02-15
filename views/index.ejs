@@ -10,9 +10,12 @@
 <script>
 $(function(){
   var context = new webkitAudioContext();
-  function oscTone(freq, vol){
+  function oscTone(freq, vol, type){
       if(vol == undefined){
         vol = 1;
+      }
+      if(type == undefined){
+        type = 0;
       }
       var oscillator = context.createOscillator();
       eg = context.createGainNode();
@@ -21,15 +24,15 @@ $(function(){
       eg.connect(context.destination);
       //console.log(eg);
 
-      oscillator.type = 1;
+      oscillator.type = type;
       oscillator.frequency.value = freq;
       //oscillator.connect(context.destination);
       oscillator.noteOn(0);
 
      var t0 = context.currentTime;
      //eg.gain.value= 0;
-     eg.gain.setValueAtTime(1, t0);
-     eg.gain.linearRampToValueAtTime(0.3, t0 + 0.5);
+     eg.gain.setValueAtTime(vol, t0);
+     eg.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
      return oscillator
   }
   var baseTone = [  // 半音の周波数
@@ -126,17 +129,46 @@ $(function(){
     tone[i + 12] = baseTone[i];
   }
   for(var i =0; i < 12;i ++){
-    tone[i + 12] = baseTone[i]*2;
+    tone[i + 24] = baseTone[i]*2;
   }
   for(var i =0; i < 12;i ++){
-    tone[i + 12] = baseTone[i]*4;
+    tone[i + 36] = baseTone[i]*4;
   }
 
+  // メロディの種を作ってみる
+  // 1小節8分音符が最小単位として
+  var melodyRythm = [
+    {len:1},
+    {len:1},
+    {len:1},
+    {len:1},
+    {len:2},
+    {len:1},
+    {len:1},
+  ];
+  // ギターパート用のリズムとメロディ指定
+  // 1小節8分音符が最小単位として
+  var guitarMelody = [
+    {len: 1, tones:[0,1,2]},
+    {len: 1, tones:[0]},
+    {len: 1, tones:[0,1,2]},
+    {len: 1, tones:[1]},
+    {len: 1, tones:[0,1,2]},
+    {len: 1, tones:[2]},
+    {len: 1, tones:[0,1,2]},
+    {len: 1, tones:[]},
+  ];
 
   // 0 - (n-1)
   function randint(n){
     var r = Math.floor(Math.random() * n);
     return r;
+  }
+  function inArray(arr, target){
+    for(var i = 0; i < arr.length; i++){
+      if(arr[i]==target)return true;
+    }
+    return false;
   }
 
 
@@ -159,32 +191,19 @@ $(function(){
   
   // chordScore上の位置
   cpos = 0;
+  // rythm上の位置
+  rpos = 0;
 
   targetSpeed = 1000/4;
   speed = 1000/4;
+  var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
     function tick(){
       if(t % 8 == 0){  // 小節？
         nowChord = chordScore[cpos];
         console.log(nowChord);
-        if(n1){n1.noteOff(0);n1 = null;}
-        if(n2){n2.noteOff(0);n2 = null;}
-        if(n3){n3.noteOff(0);n3 = null;}
-        if(n4){n4.noteOff(0);n4 = null;}
-
         root = randint(baseMagic.length);
-        var v = 0.3;
-        var n;
-
-        n = toneNameMap[nowChord.root];
-        var cs = chord[nowChord.scale];
-        // 回転指定の処理
-        n1 = oscTone(tone[(n + cs[0]%7)] * 2, v);
-        n2 = oscTone(tone[(n + cs[1]%7)] * 2, v);
-        n3 = oscTone(tone[(n + cs[2]%7)] * 2, v);
-        if(cs.length >= 4)n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
-
         cpos ++;
         if(cpos >= chordScore.length){
           cpos = 0;
@@ -194,18 +213,50 @@ $(function(){
           targetSpeed = nowChord.speed;
         }
       }
-      if(n5)n5.noteOff(0);
+
+      if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
+      if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
+      if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
+      if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
+
       var v = 0.5;
-      var n = 0;
+      var n;
+      n = toneNameMap[nowChord.root];
+
       var cs = chord[nowChord.scale];
-      while(true){
-        n = cs[randint(cs.length)];
-        if(ngTone(n)){
-          continue; // 1-D,  5-A
+      // todo:回転指定の処理
+      if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 0);}
+      if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 0);}
+      if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 0);}
+      if(n4==null && inArray(guitarMelody[rpos].tones,3)){
+        if(cs.length >= 4){
+          n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
         }
-        break;
       }
-      n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
+
+      if(restToneLen == 0){
+        if(n5)n5.noteOff(0);
+        var v = 0.5;
+        var n = 0;
+        var cs = chord[nowChord.scale];
+        while(true){
+          // 使ってよい音程から一つ選ぶ
+          n = cs[randint(cs.length)];
+          if(ngTone(n)){
+            continue;
+          }
+          break;
+        }
+        n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
+        restToneLen = melodyRythm[rpos].len;
+
+        rpos ++;
+        if(rpos >= melodyRythm.length){
+          rpos = 0;
+        }
+      }
+      if(restToneLen != 0)restToneLen --;
+ 
 
       if(Math.abs(speed - targetSpeed)>0.001){
         speed += (targetSpeed - speed)/10;
