@@ -1,11 +1,11 @@
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=320, initial-scale=1, minimum-scale=1, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--<meta name="apple-mobile-web-app-status-bar-style" content="black">-->
-
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<link rel='stylesheet' href='/stylesheets/bootstrap-responsive.css' />
+<link rel='stylesheet' href='/stylesheets/common.css' />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="javascripts/BufferLoader.js"></script>
 <script>
@@ -14,17 +14,32 @@ $(function(){
   var soundList = {
       kick: "sounds/kick.wav",
       snare: "sounds/snare.wav",
-      hihat: "sounds/hihat.wav",
+      hihat: "sounds/hihat_real.mp3",
   };
   var soundBuffers;
   var soundPattern = {
-      basic: {
-        kick:  [0, 4],
-        snare: [2, 6],
-        hihat: [0, 1, 2, 3, 4, 5, 6, 7],
-    },
+    basic: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
   };
-  var BL      = new BufferLoader(context, storeSound);
+
+  var BL = new BufferLoader(context, storeSound);
   BL.load(soundList);
 
   function oscTone(freq, vol, type){
@@ -220,6 +235,7 @@ $(function(){
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
+    $(this).toggleClass("on");
     function tick(){
       if(t % 8 == 0){  // 小節？
         nowChord = chordScore[cpos];
@@ -296,7 +312,6 @@ $(function(){
       }
       if(restToneLen != 0)restToneLen --;
  
-
       playDrumsPattern(t, "basic");
 
       if(Math.abs(speed - targetSpeed)>0.001){
@@ -324,24 +339,43 @@ $(function(){
 
   function playDrumsPattern(tick, pattern) {
     for (var type in soundPattern[pattern]) {
-      soundPattern[pattern][type].forEach(function (targetTick) {
-        if (tick % 8 == targetTick) {
-          playBuffer(type);
-        }
-      });
+      var currentBeat = tick % 16,
+          targetSoundBuffer = soundPattern[pattern][currentBeat],
+          type;
+
+      for (var i = 0, length = targetSoundBuffer.length;i < length;i++) {
+        type = targetSoundBuffer[i];
+        playBuffer(type);
+      }
     }
   }
-
 });
-
 </script>
-<style>
-
-</style>
 
 <body>
 
-<button id="start">START</button>
+<div class="wrapper container-fluid">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">earPhone</a>
+        </div>
+        </div>
+    </div>
 
+    <!-- .row-fluid START -->
+    <div class="row-fluid">
+        <img id="imgArea" src="" alt="">
+        <button id="start">START</button>
+        <div class="debug">
+            <div id="connectId"></div>
+            <div id="type"></div>
+            <div id="hostName"><%= hostName %></div>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/main.js"></script>
 </body>
 </html>
