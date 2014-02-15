@@ -15,6 +15,10 @@ $(function(){
       kick: "sounds/kick.wav",
       snare: "sounds/snare.wav",
       hihat: "sounds/hihat_real.mp3",
+      hightam: "sounds/Tom_Kit_02.wav",
+      lowtam: "sounds/Tom_01.wav",
+      floor: "sounds/Floor_02.wav",
+      crash: "sounds/Crash_02.wav",
       base: "sounds/BaseA.mp3",
       hguitar: "sounds/high_guitar_a.mp3",
       piano: "sounds/a_piano.wav",
@@ -128,7 +132,6 @@ $(function(){
       ["hihat"],
       [],
     ],
-
     liver: [
       // 16拍用意する
       ["hihat", "kick"],
@@ -165,6 +168,77 @@ $(function(){
       ["hihat"],
       [],
     ],
+    filet: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["hightam"],
+      [],
+      ["hightam"],
+      [],
+      ["lowtam", "kick"],
+      [],
+      ["lowtam"],
+      [],
+      ["floor"],
+      [],
+      ["floor"],
+      [],
+    ],
+    rib: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["snare", "kick"],
+      [],
+      ["snare"],
+      [],
+      ["crash"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    ],
+
   };
 
   var BL = new BufferLoader(context, storeSound);
@@ -226,6 +300,7 @@ $(function(){
     //eg.gain.value= 0;
     source.gain.setValueAtTime(vol, t0);
     source.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
+    //setTimeout(function(){source.disconnect(context.destination)},3000)
     //eg.gain.linearRampToValueAtTime(0, t0 + 2);
 
     return source
@@ -370,15 +445,27 @@ $(function(){
   // ギターパート用のリズムとメロディ指定
   // 1小節8分音符が最小単位として
   var guitarMelody = [
-    {tones:[0,1,2]},
-    {tones:[0,1,2]},
     {tones:[0]},
     {tones:[1]},
     {tones:[2]},
-    {tones:[1]},
-    {tones:[0]},
+    {tones:[]},
+    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[]},
     {tones:[]},
   ];
+
+var baseMelody = [
+    {tone:0},
+    {tone:0},
+    {tone:0},
+    {tone:0},
+    {tone:1},
+    {tone:1},
+    {tone:2},
+    {tone:2},
+  ];
+
 
 
   // オシレーター
@@ -424,16 +511,7 @@ $(function(){
           cpos = 0;
         }
 
-        // base
-        n = toneNameMap[nowChord.root];
-        if(n8)n8.noteOff(0);
-        if(n9)n9.noteOff(0);
-        v = 1;
-        //setTimeout(function(){
-          n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0, 'base');
-        //},0);
-        //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
- 
+
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
         }
@@ -446,10 +524,26 @@ $(function(){
         if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(currentTime + 3);n3 = null;}
         if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(currentTime + 3);n4 = null;}
 
-        var v = 3;
+        var v;
         var n;
         n = toneNameMap[nowChord.root];
 
+        if(n8 && (rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone)){
+	  n8.noteOff(0);
+	}
+        if(n9)n9.noteOff(0);
+        v = 0.1;
+        if(rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone){
+          var cs = chord[nowChord.scale];
+        //setTimeout(function(){
+          n8 = oscTone(tone[n + cs[baseMelody[rpos].tone]] * 2, v, 0, 'base');
+        //},0);
+	}
+
+        //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
+
+	v = 5;
+ 
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
         if(n1==null && inArray(guitarMelody[rpos].tones,0)){
@@ -485,7 +579,7 @@ $(function(){
           if(Math.random() > 0.9 || true){ // きもいのでこれで
             while(true){
               // 使ってよい音程から一つ選ぶ
-              tn = (cs[randint(cs.length)] + n)%12;
+              tn = (choice(cs) + n)%12;
               if(ngTone(n)){
                 continue;
               }
@@ -525,6 +619,8 @@ $(function(){
       //playDrumsPattern(t, "araya");
       //playDrumsPattern(t, "heart");
       //playDrumsPattern(t, "liver");
+      //playDrumsPattern(t, "filet");
+      //playDrumsPattern(t, "rib");
 
       t ++;
       setTimeout(tick, speed);
@@ -549,6 +645,7 @@ $(function(){
     //eg.gain.setValueAtTime(0.01, t0);
     source.noteOn(0.0);
     source.noteOff(context.currentTime + 3);
+    //setTimeout(function(){source.disconnect(context.destination)},3500);
   }
 
   function playDrumsPattern(tick, pattern) {
