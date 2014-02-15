@@ -14,17 +14,32 @@ $(function(){
   var soundList = {
       kick: "sounds/kick.wav",
       snare: "sounds/snare.wav",
-      hihat: "sounds/hihat.wav",
+      hihat: "sounds/hihat_real.mp3",
   };
   var soundBuffers;
   var soundPattern = {
-      basic: {
-        kick:  [0, 4],
-        snare: [2, 6],
-        hihat: [0, 1, 2, 3, 4, 5, 6, 7],
-    },
+    basic: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
   };
-  var BL      = new BufferLoader(context, storeSound);
+
+  var BL = new BufferLoader(context, storeSound);
   BL.load(soundList);
 
   function oscTone(freq, vol, type){
@@ -274,7 +289,6 @@ $(function(){
       }
       if(restToneLen != 0)restToneLen --;
  
-
       playDrumsPattern(t, "basic");
 
       if(Math.abs(speed - targetSpeed)>0.001){
@@ -302,14 +316,16 @@ $(function(){
 
   function playDrumsPattern(tick, pattern) {
     for (var type in soundPattern[pattern]) {
-      soundPattern[pattern][type].forEach(function (targetTick) {
-        if (tick % 8 == targetTick) {
-          playBuffer(type);
-        }
-      });
+      var currentBeat = tick % 16,
+          targetSoundBuffer = soundPattern[pattern][currentBeat],
+          type;
+
+      for (var i = 0, length = targetSoundBuffer.length;i < length;i++) {
+        type = targetSoundBuffer[i];
+        playBuffer(type);
+      }
     }
   }
-
 });
 
 </script>
