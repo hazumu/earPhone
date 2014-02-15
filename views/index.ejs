@@ -208,10 +208,11 @@ $(function(){
         source = context.createBufferSource();
     source.buffer = buffer;
  
-    var eg = context.createGainNode();
+    //var eg = context.createGainNode();
     //eg.gain.linearRampToValueAtTime(1, 0.1);
-    source.connect(eg);
-    eg.connect(context.destination);
+    //source.connect(eg);
+    source.connect(context.destination);
+    //eg.connect(context.destination);
     //console.log(eg);
 
     //oscillator.type = type;
@@ -222,8 +223,8 @@ $(function(){
 
     var t0 = context.currentTime;
     //eg.gain.value= 0;
-    eg.gain.setValueAtTime(vol, t0);
-    eg.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
+    source.gain.setValueAtTime(vol, t0);
+    source.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
     //eg.gain.linearRampToValueAtTime(0, t0 + 2);
 
     return source
@@ -291,7 +292,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(120/4*8*4)},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(140/4*8*4)},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -310,7 +311,7 @@ $(function(){
     {root:'f',scale: 'M', base:0},
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M7', base:0},
-    {root:'c',scale: 'M', base:0},
+    {root:'c',scale: 'M', base:0, speed: 1000 * 60/(120/4*8*4)},
   ];
 
   // 4オクターブ分の周波数生成
