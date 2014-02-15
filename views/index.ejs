@@ -387,7 +387,7 @@ $(function(){
 
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny'},
+    {root:'c',scale: 'M', base:0, drumType: "araya", theme: 'sunny'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -405,7 +405,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(100/4*8*4), drumType: "filet"},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
  
     // alarm
     {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm'},
@@ -756,16 +756,12 @@ $(function(){
   function playBuffer(type) {
     var buffer = soundBuffers[type],
         source = context.createBufferSource();
+
     source.buffer = buffer;
-    //var eg = context.createGainNode();
-    //source.connect(eg);
-    //eg.connect(context.destination);
     source.gain.value = 0.05;
     source.connect(context.destination);
-    //var t0 = context.currentTime;
-    //eg.gain.setValueAtTime(0.01, t0);
     source.noteOn(0.0);
-    source.noteOff(context.currentTime + 3);
+    source.noteOff(context.currentTime + 0.1);
     //setTimeout(function(){source.disconnect(context.destination)},3500);
   }
 
