@@ -205,19 +205,22 @@ body {
 }
 
 #imgWrap {
-    width: 100%;
+    width: 320px;
     height: 200px;
     overflow: hidden;
-    margin: 0;
+    margin: 0 auto;
 }
 
 #imgWrap ul {
     display: -webkit-box;
     display:flex;
     margin: 0;
+    /*
     opacity: 0;
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760) ,opacity .5s ease-in;  
     transition: transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760) ,opacity .5s ease-in;  
+    */
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760);  
 }
 
 #imgWrap li {

@@ -38,23 +38,26 @@ $(function() {
         },
         path: "/images/",
         preload: function() {
-            for (var i in ImageManager.images) {
-                var img = document.createElement("img");
-                img.src = ImageManager.path + ImageManager.images[i];
-            }
+            $(window).on("load", function() {
+                for (var i in ImageManager.images) {
+                    var img = document.createElement("img");
+                    img.src = ImageManager.path + ImageManager.images[i];
+                }
+            });
         },
         show: function(cmd) {
             $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
         },
         clear: function() {
             $("#imgList")
-                .empty()
                 .css({
                         "-webkit-transform" : "translate(0px, 0px)",
-                        "opacity" : 1
+                        // "opacity" : 1
+                        "display" : "none"
                     });
         },
         render: function () {
+            /*
             var html = "";
             for (var i in ImageManager.images) {
                 html += '<li><img src=' + ImageManager.path + ImageManager.images[i] + ' /></li>';
@@ -63,9 +66,20 @@ $(function() {
             $("#imgList")
                 .html(html)
                 .css({
-                        "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
-                        "opacity" : 1
+                        "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
                     });
+            */
+            var nextX = $("#imgWrap").width();
+            $("#imgList")
+                .css({
+                        "display" : "-webkit-box",
+                    });
+            setTimeout(function() {
+                $("#imgList")
+                    .css({
+                            "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
+                        });
+            }, 500);
         },
         slide: function(cmd) {
             var pos = 0;
@@ -80,8 +94,8 @@ $(function() {
             pos = $(window).width() * i;
 
             $("#imgList").css({
-                    "-webkit-transform" : "translate(-" + pos + "px, 0px)",
-                });
+                "-webkit-transform" : "translate(-" + pos + "px, 0px)",
+            });
         }
     };
 
