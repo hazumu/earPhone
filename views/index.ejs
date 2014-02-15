@@ -108,7 +108,7 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0},
+    {root:'b',scale:'M7', base:0, speed: 1000},
 
     // rainy
     {root:'e',scale: 'm', base:0},
@@ -118,7 +118,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0},
+    {root:'d',scale: 'M7', base:0, speed: 1000/6},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -127,7 +127,7 @@ $(function(){
     {root:'g',scale: 'M', base:3},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M', base:0},
-    {root:'g',scale: 'M7', base:0},
+    {root:'g',scale: 'M7', base:0, speed: 1000},
   
     // sleep
     {root:'c',scale: 'M', base:0},
@@ -183,8 +183,11 @@ $(function(){
   // chordScore上の位置
   cpos = 0;
 
+  targetSpeed = 1000/4;
+  speed = 1000/4;
+
   $('#start').click(function(){
-    setInterval(function(){
+    function tick(){
       if(t % 8 == 0){  // 小節？
         nowChord = chordScore[cpos];
         console.log(nowChord);
@@ -209,8 +212,10 @@ $(function(){
         if(cpos >= chordScore.length){
           cpos = 0;
         }
-
  
+        if(nowChord.speed){
+          targetSpeed = nowChord.speed;
+        }
       }
       if(n5)n5.noteOff(0);
       var v = 0.5;
@@ -225,9 +230,13 @@ $(function(){
       }
       n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
 
+      if(Math.abs(speed - targetSpeed)>0.001){
+        speed += (targetSpeed - speed)/10;
+      }
       t ++;
-
-    }, 1000/4)
+      setTimeout(tick, speed);
+    }
+    setTimeout(tick, speed);
   });
 });
 </script>
