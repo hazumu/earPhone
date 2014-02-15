@@ -48,10 +48,12 @@ $(function() {
             var nextX = $("#imgWrap").width();
             $("#imgWrap ul")
                 .html(html)
-                .css({
-                    "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
-                    "opacity" : 1
-                });
+            setTimeout(function() {
+                $("#imgWrap ul").css({
+                        "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
+                        "opacity" : 1
+                    });
+            }, 10000);
             /*
                 .on("webkitTransitionEnd", function() {
                     $("#imgWrap ul").off("webkitTransitionEnd")
