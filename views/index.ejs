@@ -355,10 +355,6 @@ $(function(){
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
-<<<<<<< HEAD
-    $(this).toggleClass("on");
-=======
->>>>>>> master
     function tick(){
       if(t % 32 == 0){  // 小節？
         nowChord = chordScore[cpos];
@@ -488,6 +484,13 @@ $(function(){
         </div>
     </div>
 </div>
+
+<div id="likeBtn">イイネ！</div>
+<script type="text/javascript">
+$("#likeBtn").click(function(){
+	$(this).toggleClass("on");
+});
+</script>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/javascripts/main.js"></script>
