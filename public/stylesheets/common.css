@@ -1,8 +1,8 @@
 /* Layouts
 -------------------------------------------------- */
 body {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 	padding-top: 60px;
 	background-color: #FBEFF9;
 	color: #444;
@@ -10,17 +10,23 @@ body {
 
 .navbar-inner {
 	background-image: none;
+    /*
 	background-color: #F097E3;
 	color: #FFF;
+    */
 }
 
 .navbar .brand {
 	text-shadow: none;
+    /*
 	color: #FFF;
+    */
 }
 
 .breadcrumb {
+    /*
 	background-color: #ffe5f2;
+    */
 }
 
 .wrapper {
@@ -182,7 +188,7 @@ body {
     display: -webkit-box;
     margin: 0;
     opacity: 0;
-    -webkit-transition: -webkit-transform .5s ease-in ,opacity .5s ease-in;  
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760) ,opacity .5s ease-in;  
 }
 
 #imgWrap li {

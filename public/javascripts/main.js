@@ -40,6 +40,14 @@ $(function() {
         show: function(cmd) {
             $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
         },
+        clear: function() {
+            $("#imgWrap ul")
+                .empty()
+                .css({
+                        "-webkit-transform" : "translate(0px, 0px)",
+                        "opacity" : 1
+                    });
+        },
         render: function () {
             var html = "";
             for (var i in ImageManager.images) {
@@ -48,12 +56,10 @@ $(function() {
             var nextX = $("#imgWrap").width();
             $("#imgWrap ul")
                 .html(html)
-            setTimeout(function() {
-                $("#imgWrap ul").css({
+                .css({
                         "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
                         "opacity" : 1
                     });
-            }, 10000);
             /*
                 .on("webkitTransitionEnd", function() {
                     $("#imgWrap ul").off("webkitTransitionEnd")
@@ -100,7 +106,10 @@ $(function() {
                     $(this)
                          .removeClass("on down")
                          .addClass("up")
-                         .html("START");
+                         .html("START")
+                         .on("webkitTransitionEnd", function(){
+                            ImageManager.clear();
+                         });
                 }
                 startBtn.isStart = !startBtn.isStart;
             });
