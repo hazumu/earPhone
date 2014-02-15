@@ -115,7 +115,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000/6},
+    {root:'d',scale: 'M7', base:0, speed: 1000/3},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -166,14 +166,14 @@ $(function(){
   // ギターパート用のリズムとメロディ指定
   // 1小節8分音符が最小単位として
   var guitarMelody = [
-    {len: 1, tones:[0,1,2]},
-    {len: 1, tones:[0]},
-    {len: 1, tones:[0,1,2]},
-    {len: 1, tones:[1]},
-    {len: 1, tones:[0,1,2]},
-    {len: 1, tones:[2]},
-    {len: 1, tones:[0,1,2]},
-    {len: 1, tones:[]},
+    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[]},
+    {tones:[0,1,2]},
+    {tones:[0,1,2]},
+    {tones:[]},
   ];
 
   // 0 - (n-1)
@@ -195,6 +195,10 @@ $(function(){
   n3 = null;  // chord3
   n4 = null;  // chord4
   n5 = null;  // melody
+  n6 = null;  // melody2(double wave)
+  n7 = null;  // melody2(double wave)
+  n8 = null;  // base
+  n9 = null;  // base
 
   t = 0;  // タイマー
   root = 0;  // 今のrootのmagic index
@@ -225,6 +229,14 @@ $(function(){
         if(cpos >= chordScore.length){
           cpos = 0;
         }
+
+        // base
+        n = toneNameMap[nowChord.root];
+        if(n8)n8.noteOff(0);
+        if(n9)n9.noteOff(0);
+        v = 0.6;
+        n8 = oscTone(tone[baseMagic[n%7]], v, 0);
+        n9 = oscTone(tone[baseMagic[n%7]]/2, v, 0);
  
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
@@ -236,7 +248,7 @@ $(function(){
       if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
       if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
 
-      var v = 0.5;
+      var v = 0.3;
       var n;
       n = toneNameMap[nowChord.root];
 
@@ -253,18 +265,28 @@ $(function(){
 
       if(restToneLen == 0){
         if(n5)n5.noteOff(0);
-        var v = 0.5;
-        var n = 0;
+        if(n6)n6.noteOff(0);
+        if(n7)n7.noteOff(0);
+        var v = 0.4;
+        var tn = 0;
         var cs = chord[nowChord.scale];
-        while(true){
-          // 使ってよい音程から一つ選ぶ
-          n = cs[randint(cs.length)];
-          if(ngTone(n)){
-            continue;
+	if(Math.random() > 0.9||true){
+          while(true){
+            // 使ってよい音程から一つ選ぶ
+            tn = cs[randint(cs.length)] + n;
+            if(ngTone(n)){
+              continue;
+            }
+            break;
           }
-          break;
-        }
-        n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
+	}else{
+	  // はみ出した音を鳴らす
+	  // todo: スケールをあわせる
+	  tn = randint(7) + n;
+	}
+        n5 = oscTone(tone[tn] * 2, v, 0);
+        n6 = oscTone(tone[tn] * 4, v, 0);
+        n7 = oscTone(tone[tn] * 8, v, 0);
         restToneLen = melodyRythm[rpos].len;
 
         rpos ++;
