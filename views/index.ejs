@@ -228,7 +228,6 @@ $(function(){
 
     return source
   }
-
   var baseTone = [  // 半音の周波数
     261.62,  // C   0
     277.18,  // C#  1
@@ -428,7 +427,9 @@ $(function(){
         if(n8)n8.noteOff(0);
         if(n9)n9.noteOff(0);
         v = 1;
-        n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0, 'base');
+        //setTimeout(function(){
+          n8 = oscTone(tone[baseMagic[n%7]]*1, v, 0, 'base');
+        //},0);
         //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
  
         if(nowChord.speed){
@@ -449,12 +450,26 @@ $(function(){
 
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
-        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 1, 'hguitar');}
-        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 1, 'hguitar');}
-        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 1, 'hguitar');}
+        if(n1==null && inArray(guitarMelody[rpos].tones,0)){
+          //setTimeout(function(){
+            n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 1, 'hguitar');
+          //},0);
+        }
+        if(n2==null && inArray(guitarMelody[rpos].tones,1)){
+          //setTimeout(function(){
+            n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 1, 'hguitar');
+          //},0);
+        }
+        if(n3==null && inArray(guitarMelody[rpos].tones,2)){
+          //setTimeout(function(){
+            n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 1, 'hguitar');
+          //},0);
+        }
         if(n4==null && inArray(guitarMelody[rpos].tones,3)){
           if(cs.length >= 4){
-            n4 = oscTone(tone[(n + cs[3])%7] * 4, v, 1, 'hguitar'); // 7th
+          //setTimeout(function(){
+              n4 = oscTone(tone[(n + cs[3])%7] * 4, v, 1, 'hguitar'); // 7th
+          //},0);
           }
         }
 
@@ -479,7 +494,9 @@ $(function(){
             // todo: スケールをあわせる
             tn = randint(7) + n;
           }
-          n5 = oscTone(tone[tn] * 2, v, 0, 'hguitar');
+          //setTimeout(function(){
+            n5 = oscTone(tone[tn] * 2, v, 0, 'hguitar');
+          //},0);
           //n6 = oscTone(tone[tn] * 4, v, 0);
           //n7 = oscTone(tone[tn] * 8, v, 0);
           restToneLen = melodyRythm[mpos].len;
@@ -502,8 +519,8 @@ $(function(){
           speed += (targetSpeed - speed)/10;
         }
       }
-      playDrumsPattern(t, "basic");
-      //playDrumsPattern(t, "araya");
+      //playDrumsPattern(t, "basic");
+      playDrumsPattern(t, "araya");
       //playDrumsPattern(t, "heart");
       //playDrumsPattern(t, "liver");
 
@@ -521,11 +538,13 @@ $(function(){
     var buffer = soundBuffers[type],
         source = context.createBufferSource();
     source.buffer = buffer;
-    var eg = context.createGainNode();
-    source.connect(eg);
-    eg.connect(context.destination);
-    var t0 = context.currentTime;
-    eg.gain.setValueAtTime(0.01, t0);
+    //var eg = context.createGainNode();
+    //source.connect(eg);
+    //eg.connect(context.destination);
+    source.gain.value = 0.05;
+    source.connect(context.destination);
+    //var t0 = context.currentTime;
+    //eg.gain.setValueAtTime(0.01, t0);
     source.noteOn(0);
     source.noteOff(context.currentTime + 3);
   }
@@ -538,7 +557,9 @@ $(function(){
 
       for (var i = 0, length = targetSoundBuffer.length;i < length;i++) {
         type = targetSoundBuffer[i];
-        setTimeout(function(){playBuffer(type)},0);
+        setTimeout(function(){
+          playBuffer(type);
+        },0);
       }
     }
   }
