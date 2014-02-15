@@ -1,9 +1,11 @@
 $(function() {
     console.log("console page start!");
 
+    console.log($("#hostName").text());
+
     var socket = {
         ON_SOCKET_DATA : 'ON_SOCKET_DATA',
-        connectUrl : 'http://localhost:3000',
+        connectUrl : $("#hostName").text(),
         init : function() {
             socket.io = io.connect(socket.connectUrl);
             socket.io.on('connect', socket.onConnected);

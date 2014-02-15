@@ -2,7 +2,10 @@
  * console page
  */
 exports.console = function(req, res){
-	res.render('console', {
-		title: 'コンソール画面'
-	});
+    var hostName = req.protocol + "://" + req.headers.host;
+
+    res.render('console', {
+        title: 'コンソール画面',
+        hostName: hostName
+    });
 };
