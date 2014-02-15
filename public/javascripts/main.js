@@ -80,8 +80,8 @@ $(function() {
             pos = $(window).width() * i;
 
             $("#imgList").css({
-                    "-webkit-transform" : "translate(-" + pos + "px, 0px)",
-                });
+                "-webkit-transform" : "translate(-" + pos + "px, 0px)",
+            });
         }
     };
 
