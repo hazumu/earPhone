@@ -348,7 +348,7 @@ $(function(){
 
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0},
+    {root:'c',scale: 'M', base:0, drumType: "basic"},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -356,36 +356,36 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4)},
+    {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0},
+    {root:'e',scale: 'm', base:0, drumType: "basic"},
     {root:'d',scale: 'M', base:1},
     {root:'c',scale: 'M', base:0},
     {root:'b',scale:'m', base:3},
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(140/4*8*4)},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(140/4*8*4), drumType: "filet"},
  
     // alarm
-    {root:'g',scale: 'M', base:0},
+    {root:'g',scale: 'M', base:0, drumType: "araya"},
     {root:'b',scale: 'M7', base:1},
     {root:'e',scale: 'm', base:0},
     {root:'g',scale: 'M', base:3},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M', base:0},
-    {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4)},
+    {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0},
+    {root:'c',scale: 'M', base:0, drumType: "liver"},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
     {root:'f',scale: 'M', base:0},
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M7', base:0},
-    {root:'c',scale: 'M', base:0, speed: 1000 * 60/(120/4*8*4)},
+    {root:'c',scale: 'M', base:0, speed: 1000 * 60/(120/4*8*4), drumType: "rib"},
   ];
 
   // 4オクターブ分の周波数生成
@@ -485,6 +485,7 @@ $(function(){
   targetSpeed = speed = 1000 * 60/(120/4*8*4);
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
+  var drumType = "basic";
   $('#start').click(function(){
     function tick(){
       var currentTime = context.currentTime;
@@ -509,6 +510,9 @@ $(function(){
  
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
+        }
+        if (nowChord.drumType) {
+          drumType = nowChord.drumType;
         }
 	melodyRythm = choice(melodyBank);
       }
@@ -594,12 +598,8 @@ $(function(){
           speed += (targetSpeed - speed)/10;
         }
       }
-      //playDrumsPattern(t, "basic");
-      //playDrumsPattern(t, "araya");
-      //playDrumsPattern(t, "heart");
-      //playDrumsPattern(t, "liver");
-      playDrumsPattern(t, "filet");
-      //playDrumsPattern(t, "rib");
+
+      playDrumsPattern(t, drumType);
 
       t ++;
       setTimeout(tick, speed);
