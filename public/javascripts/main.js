@@ -37,7 +37,7 @@ $(function() {
                 neru:  "neru.jpg"
         },
         path: "/images/",
-        preload: {
+        preload: function() {
             for (var i in ImageManager.images) {
                 var img = document.createElement("img");
                 img.src = ImageManager.path + ImageManager.images[i];
