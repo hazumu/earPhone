@@ -102,3 +102,25 @@ img {
     vertical-align: bottom;
 }
 
+/*
+ *  プロダクト用
+ *  ---------------------------------------------------------------------------*/
+@media (max-width: 767px) {
+    .navbar-fixed-top {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .navbar .brand {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: 0;
+        float: none;
+    }
+
+    .navbar-fixed-top .navbar-inner .container {
+        text-align: center;
+    }
+}
+

@@ -1,0 +1,119 @@
+/* Layouts
+-------------------------------------------------- */
+body {
+	padding-top: 60px;
+	color: #444;
+}
+
+.navbar-inner {
+	background-image: none;
+	color: #FFF;
+}
+
+.navbar .brand {
+	text-shadow: none;
+}
+
+.breadcrumb {
+	background-color: #ffe5f2;
+}
+
+.wrapper {
+	max-width: 970px;
+	margin: 0 auto;
+}
+
+.pager {
+	text-align: center;
+	font-size: 12px;
+}
+
+.global-footer p {
+	padding-top: 10px;
+	border-top: 1px solid #F097E3;
+	text-align: center;
+}
+
+
+/* スマホ共通
+-------------------------------------------------- */
+@media (max-width: 767px) {
+	body {
+		padding: 0;
+	}
+
+	.navbar-fixed-top {
+		margin-left: -10px;
+		margin-right: -10px;
+	}
+
+	.navbar .brand {
+		display: inline-block;
+		font-size: 16px;
+		font-weight: bold;
+		margin-left: 0;
+		float: none;
+	}
+
+	.back-link {
+		font-size: 14px;
+		font-weight:bold;
+	}
+
+	.navbar-fixed-top {
+		margin-bottom: 0;
+	}
+
+	.navbar-fixed-top .navbar-inner {
+		padding: 0;
+	}
+
+	.navbar-fixed-top .navbar-inner .container {
+		text-align: center;
+	}
+
+	.breadcrumb {
+		margin: 10px 0 0 0;
+	}
+
+	.pager {
+		font-size: 12px;
+	}
+
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+	body {
+		padding-top: 0;
+	}
+}
+
+/* SmartPhone Adjustment
+-------------------------------------------------- */
+@media (max-width: 768px) {
+	h1 {
+		font-size: 18px;
+	}
+
+	h2 {
+		font-size: 16px;
+	}
+
+	h3 {
+		font-size: 14px;
+	}
+
+	h4 {
+		font-size: 14px;
+	}
+}
+
+/* ページ個別
+-------------------------------------------------- */
+@media (max-width: 768px) {
+	@-webkit-keyframes spin {
+		0% { -webkit-transform: rotate(0deg);   opacity: 0.2;}
+		50%  { -webki-transform: rotate(180deg); opacity: 1.0;}
+		100% { -webkit-transform: rotate(360deg); opacity: 0.2;}
+	}
+}
