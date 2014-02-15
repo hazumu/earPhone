@@ -1,11 +1,43 @@
 var express = require("express"),
-    app     = express();
+    routes = require('./routes'),
+    socketIO = require('socket.io'),
+    http = require('http'),
+    path = require('path'),
+    app    = express();
 
-app.get("/", function (req, res) {
-    res.send("Hello World!");
+app.configure(function(){
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'ejs');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    // app.use(require('stylus').middleware(__dirname + '/public'));
+    app.use(express.static(path.join(__dirname, 'public')));
 });
 
-var port = Number(process.env.PORT || 8080);
-app.listen(port, function() {
-    console.log("lisning on " + port);
+app.get('/', routes.index);
+
+var server = http.createServer(app);
+console.log(app.get("port"));
+server.listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+});
+
+// クライアントの接続を待つ(IPアドレスとポート番号を結びつけます)
+var io = socketIO.listen(server);
+
+// クライアントが接続してきたときの処理
+io.sockets.on('connection', function(socket) {
+    console.log("connection");
+
+    socket.on('message', function(data) {
+        io.sockets.emit('message', { value: data.value });
+    });
+
+    socket.on('disconnect', function(){
+        console.log("disconnect");
+    });
 });
