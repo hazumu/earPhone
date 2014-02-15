@@ -42,9 +42,32 @@ $(function() {
         }
     };
 
+    var startBtn = {
+        isStart: false,
+        init: function() {
+            startBtn.addEvent();
+        },
+        addEvent: function() {
+            $("#start").on("click", function() {
+                if (!startBtn.isStart) {
+                    $(this)
+                         .addClass("on")
+                         .html("STOP");
+                } else {
+                    $(this)
+                         .removeClass("on")
+                         .html("START");
+                }
+                startBtn.isStart = !startBtn.isStart;
+            });
+        }
+    }
+
     var app = {
+        isStart : false,
         init : function() {
             socket.init();
+            startBtn.init();
             $(window).on(socket.ON_SOCKET_DATA, function(e, data) {
                 app.onSocketData(e, data);
             });

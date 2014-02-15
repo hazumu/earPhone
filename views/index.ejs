@@ -19,6 +19,114 @@ $(function(){
   var soundBuffers;
   var soundPattern = {
     basic: [
+      // 32拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+    ],
+    araya: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+    heart: [
+    // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+
+    liver: [
       // 16拍用意する
       ["hihat", "kick"],
       [],
@@ -30,7 +138,24 @@ $(function(){
       [],
       ["hihat", "kick"],
       [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
       ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
       [],
       ["hihat", "snare"],
       [],
@@ -43,29 +168,30 @@ $(function(){
   BL.load(soundList);
 
   function oscTone(freq, vol, type){
-      if(vol == undefined){
-        vol = 1;
-      }
-      if(type == undefined){
-        type = 0;
-      }
-      var oscillator = context.createOscillator();
-      eg = context.createGainNode();
-      //eg.gain.linearRampToValueAtTime(1, 0.1);
-      oscillator.connect(eg);
-      eg.connect(context.destination);
-      //console.log(eg);
+    if(vol == undefined){
+      vol = 1;
+    }
+    if(type == undefined){
+      type = 0;
+    }
+    var oscillator = context.createOscillator();
+    eg = context.createGainNode();
+    //eg.gain.linearRampToValueAtTime(1, 0.1);
+    oscillator.connect(eg);
+    eg.connect(context.destination);
+    //console.log(eg);
 
-      oscillator.type = type;
-      oscillator.frequency.value = freq;
-      //oscillator.connect(context.destination);
-      oscillator.noteOn(0);
+    oscillator.type = type;
+    oscillator.frequency.value = freq;
+    //oscillator.connect(context.destination);
+    oscillator.noteOn(0);
 
-     var t0 = context.currentTime;
-     //eg.gain.value= 0;
-     eg.gain.setValueAtTime(vol, t0);
-     eg.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
-     return oscillator
+    var t0 = context.currentTime;
+    //eg.gain.value= 0;
+    eg.gain.setValueAtTime(vol, t0);
+    eg.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
+
+    return oscillator
   }
   var baseTone = [  // 半音の周波数
     261.62,  // C   0
@@ -120,7 +246,7 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0, speed: 1000/2},
+    {root:'b',scale:'M7', base:0, speed: 1000/8},
 
     // rainy
     {root:'e',scale: 'm', base:0},
@@ -130,7 +256,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000/3},
+    {root:'d',scale: 'M7', base:0, speed: 1000/12},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -139,7 +265,7 @@ $(function(){
     {root:'g',scale: 'M', base:3},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M', base:0},
-    {root:'g',scale: 'M7', base:0, speed: 1000},
+    {root:'g',scale: 'M7', base:0, speed: 1000/4},
   
     // sleep
     {root:'c',scale: 'M', base:0},
@@ -246,14 +372,12 @@ $(function(){
   // rythm上の位置
   rpos = 0;
 
-  targetSpeed = 1000/4;
-  speed = 1000/4;
+  targetSpeed = speed = 1000/16;
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
-    $(this).toggleClass("on");
     function tick(){
-      if(t % 8 == 0){  // 小節？
+      if(t % 32 == 0){  // 小節？
         nowChord = chordScore[cpos];
         console.log(nowChord);
         root = randint(baseMagic.length);
@@ -276,70 +400,77 @@ $(function(){
 	melodyRythm = choice(melodyBank);
       }
 
-      if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
-      if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
-      if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
-      if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
+      if (t % 4 === 0) {
+        if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
+        if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
+        if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
+        if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
 
-      var v = 1;
-      var n;
-      n = toneNameMap[nowChord.root];
+        var v = 1;
+        var n;
+        n = toneNameMap[nowChord.root];
 
-      var cs = chord[nowChord.scale];
-      // todo:回転指定の処理
-      if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 2, v, 0);}
-      if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 2, v, 0);}
-      if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 2, v, 0);}
-      if(n4==null && inArray(guitarMelody[rpos].tones,3)){
-        if(cs.length >= 4){
-          n4 = oscTone(tone[(n + cs[3])%7] * 2, v); // 7th
+        var cs = chord[nowChord.scale];
+        // todo:回転指定の処理
+        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 2, v, 0);}
+        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 2, v, 0);}
+        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 2, v, 0);}
+        if(n4==null && inArray(guitarMelody[rpos].tones,3)){
+          if(cs.length >= 4){
+            n4 = oscTone(tone[(n + cs[3])%7] * 2, v); // 7th
+          }
+        }
+
+        if(restToneLen == 0){
+          if(n5)n5.noteOff(0);
+          if(n6)n6.noteOff(0);
+          if(n7)n7.noteOff(0);
+          var v = 0.9;
+          var tn = 0;
+          var cs = chord[nowChord.scale];
+          if(Math.random() > 0.9 || true){ // きもいのでこれで
+            while(true){
+              // 使ってよい音程から一つ選ぶ
+              tn = (cs[randint(cs.length)] + n)%12;
+              if(ngTone(n)){
+                continue;
+              }
+              break;
+            }
+          }else{
+            // はみ出した音を鳴らす
+            // todo: スケールをあわせる
+            tn = randint(7) + n;
+          }
+          n5 = oscTone(tone[tn] * 2, v, 0);
+          n6 = oscTone(tone[tn] * 4, v, 0);
+          n7 = oscTone(tone[tn] * 8, v, 0);
+          restToneLen = melodyRythm[mpos].len;
+
+          mpos ++;
+          if(mpos >= melodyRythm.length){
+            mpos = 0;
+          }
+ 
+        }
+        rpos ++;
+        if(rpos >= 8){
+          rpos = 0;
+        }
+ 
+        if(restToneLen != 0)restToneLen --;
+ 
+        playDrumsPattern(t, "basic");
+
+        if(Math.abs(speed - targetSpeed) > 0.001){
+          speed += (targetSpeed - speed)/10;
         }
       }
-
-      if(restToneLen == 0){
-        if(n5)n5.noteOff(0);
-        if(n6)n6.noteOff(0);
-        if(n7)n7.noteOff(0);
-        var v = 0.9;
-        var tn = 0;
-        var cs = chord[nowChord.scale];
-	if(Math.random() > 0.9 || true){ // きもいのでこれで
-          while(true){
-            // 使ってよい音程から一つ選ぶ
-            tn = (cs[randint(cs.length)] + n)%12;
-            if(ngTone(n)){
-              continue;
-            }
-            break;
-          }
-	}else{
-	  // はみ出した音を鳴らす
-	  // todo: スケールをあわせる
-	  tn = randint(7) + n;
-	}
-        n5 = oscTone(tone[tn] * 2, v, 0);
-        n6 = oscTone(tone[tn] * 4, v, 0);
-        n7 = oscTone(tone[tn] * 8, v, 0);
-        restToneLen = melodyRythm[mpos].len;
-
-        mpos ++;
-        if(mpos >= melodyRythm.length){
-          mpos = 0;
-	}
- 
-      }
-      rpos ++;
-      if(rpos >= 8){
-        rpos = 0;
-      }
- 
-      if(restToneLen != 0)restToneLen --;
- 
       playDrumsPattern(t, "basic");
+      //playDrumsPattern(t, "araya");
+      //playDrumsPattern(t, "heart");
+      //playDrumsPattern(t, "liver");
 
-      if(Math.abs(speed - targetSpeed) > 0.001){
-        speed += (targetSpeed - speed)/10;
-      }
       t ++;
       setTimeout(tick, speed);
     }
@@ -348,13 +479,11 @@ $(function(){
 
   function storeSound(buffer) {
     soundBuffers = buffer;
-    console.dir(soundBuffers);
   }
 
   function playBuffer(type) {
     var buffer = soundBuffers[type],
         source = context.createBufferSource();
-
     source.buffer = buffer;
     source.connect(context.destination);
     source.noteOn(0);
@@ -362,13 +491,13 @@ $(function(){
 
   function playDrumsPattern(tick, pattern) {
     for (var type in soundPattern[pattern]) {
-      var currentBeat = tick % 16,
+      var currentBeat = tick % 32,
           targetSoundBuffer = soundPattern[pattern][currentBeat],
           type;
 
       for (var i = 0, length = targetSoundBuffer.length;i < length;i++) {
         type = targetSoundBuffer[i];
-        playBuffer(type);
+        setTimeout(function(){playBuffer(type)},0);
       }
     }
   }
