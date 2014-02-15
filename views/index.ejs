@@ -19,6 +19,114 @@ $(function(){
   var soundBuffers;
   var soundPattern = {
     basic: [
+      // 32拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+      ["hihat", "snare"],
+      [],
+      [],
+      [],
+      ["hihat"],
+      [],
+      [],
+      [],
+    ],
+    araya: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+    heart: [
+    // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+
+    liver: [
       // 16拍用意する
       ["hihat", "kick"],
       [],
@@ -30,7 +138,24 @@ $(function(){
       [],
       ["hihat", "kick"],
       [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
       ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
       [],
       ["hihat", "snare"],
       [],
@@ -120,7 +245,7 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0, speed: 1000},
+    {root:'b',scale:'M7', base:0, speed: 1000/4},
 
     // rainy
     {root:'e',scale: 'm', base:0},
@@ -130,7 +255,7 @@ $(function(){
     {root:'b',scale: 'M7', base:0},
     {root:'e',scale:'m', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'d',scale: 'M7', base:0, speed: 1000/6},
+    {root:'d',scale: 'M7', base:0, speed: 1000/24},
  
     // alarm
     {root:'g',scale: 'M', base:0},
@@ -139,7 +264,7 @@ $(function(){
     {root:'g',scale: 'M', base:3},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M', base:0},
-    {root:'g',scale: 'M7', base:0, speed: 1000},
+    {root:'g',scale: 'M7', base:0, speed: 1000/4},
   
     // sleep
     {root:'c',scale: 'M', base:0},
@@ -226,13 +351,12 @@ $(function(){
   // rythm上の位置
   rpos = 0;
 
-  targetSpeed = 1000/4;
-  speed = 1000/4;
+  targetSpeed = speed = 1000/16;
   var restToneLen = 0; // 今の音をあと何テンポ残すか
 
   $('#start').click(function(){
     function tick(){
-      if(t % 8 == 0){  // 小節？
+      if(t % 32 == 0){  // 小節？
         nowChord = chordScore[cpos];
         console.log(nowChord);
         root = randint(baseMagic.length);
@@ -246,54 +370,61 @@ $(function(){
         }
       }
 
-      if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
-      if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
-      if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
-      if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
+      if (t % 4 === 0) {
 
-      var v = 0.5;
-      var n;
-      n = toneNameMap[nowChord.root];
+        if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
+        if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(0);n2 = null;}
+        if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
+        if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
 
-      var cs = chord[nowChord.scale];
-      // todo:回転指定の処理
-      if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 0);}
-      if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 0);}
-      if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 0);}
-      if(n4==null && inArray(guitarMelody[rpos].tones,3)){
-        if(cs.length >= 4){
-          n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
-        }
-      }
-
-      if(restToneLen == 0){
-        if(n5)n5.noteOff(0);
         var v = 0.5;
-        var n = 0;
+        var n;
+        n = toneNameMap[nowChord.root];
+
         var cs = chord[nowChord.scale];
-        while(true){
-          // 使ってよい音程から一つ選ぶ
-          n = cs[randint(cs.length)];
-          if(ngTone(n)){
-            continue;
+        // todo:回転指定の処理
+        if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 0);}
+        if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 0);}
+        if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 0);}
+        if(n4==null && inArray(guitarMelody[rpos].tones,3)){
+          if(cs.length >= 4){
+            n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
           }
-          break;
         }
-        n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
-        restToneLen = melodyRythm[rpos].len;
 
-        rpos ++;
-        if(rpos >= melodyRythm.length){
-          rpos = 0;
+        if(restToneLen == 0){
+          if(n5)n5.noteOff(0);
+          var v = 0.5;
+          var n = 0;
+          var cs = chord[nowChord.scale];
+          while(true){
+            // 使ってよい音程から一つ選ぶ
+            n = cs[randint(cs.length)];
+            if(ngTone(n)){
+              continue;
+            }
+            break;
+          }
+          n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
+          restToneLen = melodyRythm[rpos].len;
+
+          rpos ++;
+          if(rpos >= melodyRythm.length){
+            rpos = 0;
+          }
+        }
+        if(restToneLen != 0)restToneLen --;
+   
+        if(Math.abs(speed - targetSpeed)>0.001){
+          speed += (targetSpeed - speed)/10;
         }
       }
-      if(restToneLen != 0)restToneLen --;
- 
-      playDrumsPattern(t, "basic");
 
-      if(Math.abs(speed - targetSpeed)>0.001){
-        speed += (targetSpeed - speed)/10;
-      }
+      //playDrumsPattern(t, "basic");
+      playDrumsPattern(t, "araya");
+      //playDrumsPattern(t, "heart");
+      //playDrumsPattern(t, "liver");
+
       t ++;
       setTimeout(tick, speed);
     }
@@ -316,7 +447,7 @@ $(function(){
 
   function playDrumsPattern(tick, pattern) {
     for (var type in soundPattern[pattern]) {
-      var currentBeat = tick % 16,
+      var currentBeat = tick % 32,
           targetSoundBuffer = soundPattern[pattern][currentBeat],
           type;
 
