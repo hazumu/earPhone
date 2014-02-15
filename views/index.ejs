@@ -25,6 +25,42 @@ $(function(){
   };
   var soundBuffers;
   var soundPattern = {
+    rain: [
+      // 32拍用意する
+      ["hihat", "kick"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    ],
+ 
     basic: [
       // 32拍用意する
       ["hihat", "kick"],
@@ -299,7 +335,8 @@ $(function(){
     var t0 = context.currentTime;
     //eg.gain.value= 0;
     source.gain.setValueAtTime(vol, t0);
-    source.gain.linearRampToValueAtTime(vol/2, t0 + 0.5);
+    source.gain.linearRampToValueAtTime(vol, t0 + 0.5);
+    source.gain.linearRampToValueAtTime(vol/2, t0 + 1);
     //setTimeout(function(){source.disconnect(context.destination)},3000)
     //eg.gain.linearRampToValueAtTime(0, t0 + 2);
 
@@ -361,7 +398,7 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "basic", theme: 'rainy'},
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy'},
     {root:'d',scale: 'M', base:1},
     {root:'c',scale: 'M', base:0},
     {root:'b',scale:'m', base:3},
@@ -380,7 +417,7 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "liver", theme: 'sleep'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -607,7 +644,7 @@ $(function(){
 	  n8.noteOff(0);
 	}
         if(n9)n9.noteOff(0);
-        v = 2;
+        v = 1;
         if(rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone){
           var cs = chord[nowChord.scale];
         //setTimeout(function(){
@@ -661,7 +698,7 @@ $(function(){
           if(n5)n5.noteOff(currentTime + 3);
           if(n6)n6.noteOff(0);
           if(n7)n7.noteOff(0);
-          var v = 8;
+          var v = 10;
           var tn = 0;
           var cs = chord[nowChord.scale];
           if(Math.random() > 0.9 || true){ // きもいのでこれで
