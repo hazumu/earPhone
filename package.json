@@ -1,0 +1,17 @@
+{
+  "name": "earphone",
+  "version": "0.0.0",
+  "description": "earphone",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "earphone"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "0.10.x"
+  }
+}
