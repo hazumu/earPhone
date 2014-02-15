@@ -50,13 +50,14 @@ $(function() {
         },
         clear: function() {
             $("#imgList")
-                .empty()
                 .css({
                         "-webkit-transform" : "translate(0px, 0px)",
-                        "opacity" : 1
+                        // "opacity" : 1
+                        "display" : "none"
                     });
         },
         render: function () {
+            /*
             var html = "";
             for (var i in ImageManager.images) {
                 html += '<li><img src=' + ImageManager.path + ImageManager.images[i] + ' /></li>';
@@ -67,6 +68,18 @@ $(function() {
                 .css({
                         "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
                     });
+            */
+            var nextX = $("#imgWrap").width();
+            $("#imgList")
+                .css({
+                        "display" : "-webkit-box",
+                    });
+            setTimeout(function() {
+                $("#imgList")
+                    .css({
+                            "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
+                        });
+            }, 500);
         },
         slide: function(cmd) {
             var pos = 0;

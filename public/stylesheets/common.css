@@ -4,7 +4,6 @@ body {
 	width: 100%;
 	height: 100%;
 	padding-top: 60px;
-	background-color: #FBEFF9;
 	color: #444;
 }
 
@@ -151,6 +150,12 @@ body {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 	background:linear-gradient(#f3f3f3, #e6e6e6);
 	margin: 15px 0;
+	outline:none;
+}
+#start:active {
+	background:linear-gradient(to top,#e9e9e9, #d3d3d3);
+	box-shadow: 0 3px 1px rgba(0, 0, 0, 0.4) inset;
+	padding-top:2px;
 }
 #start:after {
 	display: block;
@@ -163,6 +168,9 @@ body {
 	border-radius: 80px;
 	border: 3px solid #ccc;
 }
+#start:active:after {
+	top:8px;
+}
 #start.on:after {
 	border-color: rgb(100,236,118);
 }
@@ -170,11 +178,29 @@ body {
 #start.down {
     -webkit-transition: -webkit-transform 0.4s ease-in;  
     -webkit-transform: translate(0, 200px);  
+    transition: transform 0.4s ease-in;  
+    transform: translate(0, 200px);  
 }
 
 #start.up {
     -webkit-transition: -webkit-transform 0.4s ease-out;  
     -webkit-transform: translate(0, 0);  
+    transition: transform 0.4s ease-out;  
+    transform: translate(0, 0);  
+}
+
+#likeBtn{
+	overflow: hidden;
+	width: 64px;
+	height: 25px;
+	line-height: 25px;
+	padding-left:28px;
+	background:url(/images/likeBtn.png) no-repeat 4px 2px/22px 40px,
+		linear-gradient(#f3f3f3, #e6e6e6);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+#likeBtn.on{
+	background-position:4px -20px,0 0;
 }
 
 #imgWrap {
@@ -186,9 +212,12 @@ body {
 
 #imgWrap ul {
     display: -webkit-box;
+    display:flex;
     margin: 0;
     /*
     opacity: 0;
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760) ,opacity .5s ease-in;  
+    transition: transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760) ,opacity .5s ease-in;  
     */
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.550, 0.260, 0.385, 0.760);  
 }
