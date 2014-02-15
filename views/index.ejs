@@ -442,8 +442,35 @@ $(function(){
     melodyBank.push(buildMelody());
   }
   var melodyRythm = choice(melodyBank);
+
+
+
+  // ギターメロディの種
+  // 1小節8分音符が最小単位として
+  var guitarMelodyBank = [];
+  function buildGuitarMelody(){
+    var ret = [];
+    var tmp;
+    for(var i = 0; i < 8; i ++){
+      tmp = [];
+      if(Math.random()>0.5)tmp.push(0);
+      if(Math.random()>0.7)tmp.push(1);
+      if(Math.random()>0.7)tmp.push(2);
+      if(Math.random()>0.7)tmp.push(3);
+      if(Math.random()>0.7)tmp.push(4);
+      ret.push({tones:tmp});
+    }
+    return ret;
+  }
+  for(var i=0;i<4;i++){
+    guitarMelodyBank.push(buildGuitarMelody());
+  }
+  var guitarMelody = choice(guitarMelodyBank);
+ 
+ /*
   // ギターパート用のリズムとメロディ指定
   // 1小節8分音符が最小単位として
+
   var guitarMelody = [
     {tones:[0]},
     {tones:[1]},
@@ -454,8 +481,36 @@ $(function(){
     {tones:[]},
     {tones:[]},
   ];
-
-var baseMelody = [
+  */
+  
+  // ベースメロディの種
+  // 1小節8分音符が最小単位として
+  var baseMelodyBank = [];
+  function buildBaseMelody(){
+    var ret = [];
+    var tones = [0,0,0,0,1,2];
+    var pre = -1;
+    for(var i = 0; i < 8; i ++){
+      if(pre != -1){
+        if(Math.random() > 0.8){
+          pre = choice(tones);
+	}
+      }else{
+        pre = choice(tones);
+      }
+      ret.push({tone:pre});
+    }
+    return ret;
+  }
+  for(var i=0;i<10;i++){
+    baseMelodyBank.push(buildBaseMelody());
+  }
+  var baseMelody = choice(baseMelodyBank);
+ 
+ /*
+  // ベースパート用のメロディ指定
+  // 長さ8固定
+  var baseMelody = [
     {tone:0},
     {tone:0},
     {tone:0},
@@ -465,6 +520,7 @@ var baseMelody = [
     {tone:2},
     {tone:2},
   ];
+  */
 
 
 
@@ -478,6 +534,7 @@ var baseMelody = [
   n7 = null;  // melody2(double wave)
   n8 = null;  // base
   n9 = null;  // base
+  n10 = null;  // guiter p 
 
   t = 0;  // タイマー
   root = 0;  // 今のrootのmagic index
@@ -526,6 +583,9 @@ var baseMelody = [
           drumType = nowChord.drumType;
         }
 	melodyRythm = choice(melodyBank);
+	guitarMelody = choice(guitarMelodyBank);
+	baseMelody = choice(baseMelodyBank);
+	console.log(baseMelody);
       }
 
       if (t % 4 === 0) {
@@ -533,6 +593,7 @@ var baseMelody = [
         if(n2 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,1))){n2.noteOff(currentTime + 3);n2 = null;}
         if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(currentTime + 3);n3 = null;}
         if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(currentTime + 3);n4 = null;}
+        if(n10 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,4))){n10.noteOff(currentTime + 3);n10 = null;}
 
         var v;
         var n;
@@ -546,7 +607,7 @@ var baseMelody = [
 	  n8.noteOff(0);
 	}
         if(n9)n9.noteOff(0);
-        v = 0.8;
+        v = 2;
         if(rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone){
           var cs = chord[nowChord.scale];
         //setTimeout(function(){
@@ -557,10 +618,10 @@ var baseMelody = [
         //n9 = oscTone(tone[baseMagic[n%7]]*2, v, 0, 'base');
 	
         // ====================
-        //  MELO 
+        //  GUITAR
         // ====================
  
-	v = 5;
+	v = 4;
  
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
@@ -582,11 +643,20 @@ var baseMelody = [
         if(n4==null && inArray(guitarMelody[rpos].tones,3)){
           if(cs.length >= 4){
           //setTimeout(function(){
-              n4 = oscTone(tone[(n + cs[3])%7] * 4, v, 1, 'hguitar'); // 7th
+              n4 = oscTone(tone[(n + cs[3])%7] * 1, v, 1, 'hguitar'); // 7th
           //},0);
           }
         }
-
+        if(n10==null && inArray(guitarMelody[rpos].tones,4)){
+          //setTimeout(function(){
+            n10 = oscTone(tone[(n + cs[0]%7)] * 2, v, 1, 'hguitar');
+          //},0);
+        }
+ 
+        // ====================
+        //  MELO
+        // ====================
+ 
         if(restToneLen == 0){
           if(n5)n5.noteOff(currentTime + 3);
           if(n6)n6.noteOff(0);
