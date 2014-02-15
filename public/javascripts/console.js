@@ -16,8 +16,8 @@ $(function() {
         onMessage : function(data) {
             $(window).trigger(socket.ON_SOCKET_DATA, [data.value]);
         },
-        sendData : function(data) {
-            socket.io.emit('message', {value : data});
+        sendData : function(cmd) {
+            socket.io.emit(cmd, {value : cmd});
         },
         disConnect : function() {
             var msg = socket.io.socket.transport.sessid + "は切断しました。";
