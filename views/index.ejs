@@ -7,9 +7,25 @@
 <!--<meta name="apple-mobile-web-app-status-bar-style" content="black">-->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/javascripts/BufferLoader.js"></script>
 <script>
 $(function(){
   var context = new webkitAudioContext();
+  var soundList = {
+      kick: "/sounds/kick.wav",
+      snare: "/sounds/snare.wav",
+      hihat: "/sounds/hihat.wav",
+  };
+  var soundBuffers;
+  var soundPattern = {
+      basic: {
+        kick:  [0, 4],
+        snare: [2, 6],
+        hihat: [0, 1, 2, 3, 4, 5, 6, 7],
+    },
+  };
+  var BL      = new BufferLoader(context, storeSound);
+  BL.load(soundList);
   function oscTone(freq, vol){
       if(vol == undefined){
         vol = 1;
@@ -207,6 +223,8 @@ $(function(){
       }
       n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
 
+      playDrumsPattern(t, "basic");
+
       if(Math.abs(speed - targetSpeed)>0.001){
         speed += (targetSpeed - speed)/10;
       }
@@ -215,6 +233,30 @@ $(function(){
     }
     setTimeout(tick, speed);
   });
+
+  function storeSound(buffer) {
+    soundBuffers = buffer;
+    console.dir(soundBuffers);
+  }
+
+  function playBuffer(type) {
+    var buffer = soundBuffers[type],
+        source = context.createBufferSource();
+
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.noteOn(0);
+  }
+
+  function playDrumsPattern(tick, pattern) {
+    for (var type in soundPattern[pattern]) {
+      soundPattern[pattern][type].forEach(function (targetTick) {
+        if (tick % 8 == targetTick) {
+          playBuffer(type);
+        }
+      });
+    }
+  }
 
 });
 
