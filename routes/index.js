@@ -2,7 +2,10 @@
  * index page
  */
 exports.index = function(req, res){
-	res.render('index', {
-		title: '音楽くん'
-	});
+    var hostName = req.protocol + "://" + req.headers.host;
+
+    res.render('index', {
+        title: '音楽くん',
+        hostName: hostName
+    });
 };

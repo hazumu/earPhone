@@ -29,28 +29,17 @@ $(function() {
         }
     };
 
-
     var app = {
         init : function() {
-            this.addEvnet();
             socket.init();
             $(window).on(socket.ON_SOCKET_DATA, function(e, data) {
                 app.onSocketData(e, data);
             });
         },
-        addEvnet: function() {
-            $(".btn").on("click", function(e) {
-                console.log("touch btn!",e);
-                var command = $(e.originalEvent.target).val();
-                console.log("touch btn!", command);
-                app._sendData(command);
-            })
-        },
-        _sendData: function(command) {
-            socket.sendData(command);
-        },
-        onSocketData :function(e, data) {
-            console.log("console画面でも受け取るぴょん", e, data);
+        onSocketData : function(e, data) {
+            console.log("受信", e, data);
+            // ina_job実装部分
+            // data => ame || natsu || yotei || neru
         }
     };
 

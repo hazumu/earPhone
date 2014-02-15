@@ -38,22 +38,22 @@ io.sockets.on('connection', function(socket) {
     // 雨モード
     socket.on('ame', function(data) {
         console.log('ame event');
-        io.sockets.emit('ame', data);
+        io.sockets.emit('message', data);
     });
     // 夏モード
     socket.on('natsu', function(data) {
         console.log('natsu event');
-        io.sockets.emit('natsu', data);
+        io.sockets.emit('message', data);
     });
     // 予定モード
     socket.on('yotei', function(data) {
         console.log('yotei event');
-        io.sockets.emit('yotei', data);
+        io.sockets.emit('message', data);
     });
     // 寝るモード
     socket.on('neru', function(data) {
         console.log('neru event');
-        io.sockets.emit('neru', data);
+        io.sockets.emit('message', data);
     });
 
     socket.on('disconnect', function(){
