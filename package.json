@@ -8,16 +8,16 @@
   },
   "keywords": [
     "earphone"
-    ],
-    "dependencies": {
-        "express": "3.1.x",
-        "ejs": "*",
-        "socket.io": "*"
-    },
+  ],
+  "dependencies": {
+    "express": "3.1.x",
+    "ejs": "*",
+    "socket.io": "*",
+    "always": "~2.2.0"
+  },
   "author": "",
   "license": "MIT",
   "engines": {
     "node": "0.10.x"
   }
 }
-
