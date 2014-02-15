@@ -54,6 +54,115 @@ $(function(){
       [],
       [],
     ],
+    araya: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+    heart: [
+    // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
+
+    liver: [
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+      // 16拍用意する
+      ["hihat", "kick"],
+      [],
+      ["hihat"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "kick"],
+      [],
+      ["hihat", "snare"],
+      [],
+      ["hihat"],
+      [],
+    ],
   };
 
   var BL = new BufferLoader(context, storeSound);
@@ -312,7 +421,10 @@ $(function(){
         }
       }
 
-      playDrumsPattern(t, "basic");
+      //playDrumsPattern(t, "basic");
+      playDrumsPattern(t, "araya");
+      //playDrumsPattern(t, "heart");
+      //playDrumsPattern(t, "liver");
 
       t ++;
       setTimeout(tick, speed);
