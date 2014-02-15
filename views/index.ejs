@@ -120,7 +120,7 @@ $(function(){
     {root:'d',scale:'m7', base:0},
     {root:'g',scale: 'M', base:0},
     {root:'c',scale: 'M', base:0},
-    {root:'b',scale:'M7', base:0, speed: 1000},
+    {root:'b',scale:'M7', base:0, speed: 1000/2},
 
     // rainy
     {root:'e',scale: 'm', base:0},
@@ -167,30 +167,10 @@ $(function(){
     tone[i + 36] = baseTone[i]*4;
   }
 
-  // メロディの種を作ってみる
-  // 1小節8分音符が最小単位として
-  var melodyRythm = [
-    {len:1},
-    {len:1},
-    {len:1},
-    {len:1},
-    {len:2},
-    {len:1},
-    {len:1},
-  ];
-  // ギターパート用のリズムとメロディ指定
-  // 1小節8分音符が最小単位として
-  var guitarMelody = [
-    {tones:[0,1,2]},
-    {tones:[]},
-    {tones:[0,1,2]},
-    {tones:[]},
-    {tones:[]},
-    {tones:[0,1,2]},
-    {tones:[0,1,2]},
-    {tones:[]},
-  ];
-
+  function choice(arr){
+    return arr[randint(arr.length)];
+  }
+ 
   // 0 - (n-1)
   function randint(n){
     var r = Math.floor(Math.random() * n);
@@ -202,6 +182,40 @@ $(function(){
     }
     return false;
   }
+
+  // メロディの種を作ってみる
+  // 1小節8分音符が最小単位として
+  var melodyBank = [];
+  function buildMelody(){
+    var rest = 8;
+    var r;
+    var len = [1,2,2,4];
+    var n;
+    var ret = [];
+    while(rest > 0){
+      n = choice(len);
+      if(rest - n < 0){n = rest;}
+      ret.push({len:n});
+      rest -= n;
+    }
+    return ret;
+  }
+  for(var i=0;i<10;i++){
+    melodyBank.push(buildMelody());
+  }
+  var melodyRythm = choice(melodyBank);
+  // ギターパート用のリズムとメロディ指定
+  // 1小節8分音符が最小単位として
+  var guitarMelody = [
+    {tones:[0,1,2]},
+    {tones:[0,1,2]},
+    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[0,1,2]},
+    {tones:[]},
+    {tones:[]},
+    {tones:[]},
+  ];
 
 
   // オシレーター
@@ -227,6 +241,8 @@ $(function(){
   
   // chordScore上の位置
   cpos = 0;
+  // melody上の位置
+  mpos = 0;
   // rythm上の位置
   rpos = 0;
 
@@ -257,6 +273,7 @@ $(function(){
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
         }
+	melodyRythm = choice(melodyBank);
       }
 
       if(n1 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,0))){n1.noteOff(0);n1 = null;}
@@ -264,18 +281,18 @@ $(function(){
       if(n3 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,2))){n3.noteOff(0);n3 = null;}
       if(n4 && (rpos == 0 || !inArray(guitarMelody[rpos].tones,3))){n4.noteOff(0);n4 = null;}
 
-      var v = 0.3;
+      var v = 1;
       var n;
       n = toneNameMap[nowChord.root];
 
       var cs = chord[nowChord.scale];
       // todo:回転指定の処理
-      if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 1, v, 0);}
-      if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 1, v, 0);}
-      if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 1, v, 0);}
+      if(n1==null && inArray(guitarMelody[rpos].tones,0)){n1 = oscTone(tone[(n + cs[0]%7)] * 2, v, 0);}
+      if(n2==null && inArray(guitarMelody[rpos].tones,1)){n2 = oscTone(tone[(n + cs[1]%7)] * 2, v, 0);}
+      if(n3==null && inArray(guitarMelody[rpos].tones,2)){n3 = oscTone(tone[(n + cs[2]%7)] * 2, v, 0);}
       if(n4==null && inArray(guitarMelody[rpos].tones,3)){
         if(cs.length >= 4){
-          n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
+          n4 = oscTone(tone[(n + cs[3])%7] * 2, v); // 7th
         }
       }
 
@@ -283,13 +300,13 @@ $(function(){
         if(n5)n5.noteOff(0);
         if(n6)n6.noteOff(0);
         if(n7)n7.noteOff(0);
-        var v = 0.4;
+        var v = 0.9;
         var tn = 0;
         var cs = chord[nowChord.scale];
-	if(Math.random() > 0.9||true){
+	if(Math.random() > 0.9 || true){ // きもいのでこれで
           while(true){
             // 使ってよい音程から一つ選ぶ
-            tn = cs[randint(cs.length)] + n;
+            tn = (cs[randint(cs.length)] + n)%12;
             if(ngTone(n)){
               continue;
             }
@@ -303,18 +320,24 @@ $(function(){
         n5 = oscTone(tone[tn] * 2, v, 0);
         n6 = oscTone(tone[tn] * 4, v, 0);
         n7 = oscTone(tone[tn] * 8, v, 0);
-        restToneLen = melodyRythm[rpos].len;
+        restToneLen = melodyRythm[mpos].len;
 
-        rpos ++;
-        if(rpos >= melodyRythm.length){
-          rpos = 0;
-        }
+        mpos ++;
+        if(mpos >= melodyRythm.length){
+          mpos = 0;
+	}
+ 
       }
+      rpos ++;
+      if(rpos >= 8){
+        rpos = 0;
+      }
+ 
       if(restToneLen != 0)restToneLen --;
  
       playDrumsPattern(t, "basic");
 
-      if(Math.abs(speed - targetSpeed)>0.001){
+      if(Math.abs(speed - targetSpeed) > 0.001){
         speed += (targetSpeed - speed)/10;
       }
       t ++;
