@@ -33,8 +33,25 @@ var io = socketIO.listen(server);
 io.sockets.on('connection', function(socket) {
     console.log("connection");
 
-    socket.on('message', function(data) {
-        io.sockets.emit('message', { value: data.value });
+    // 雨モード
+    socket.on('ame', function(data) {
+        console.log('ame event');
+        io.sockets.emit('ame', data);
+    });
+    // 夏モード
+    socket.on('natsu', function(data) {
+        console.log('natsu event');
+        io.sockets.emit('natsu', data);
+    });
+    // 予定モード
+    socket.on('yotei', function(data) {
+        console.log('yotei event');
+        io.sockets.emit('yotei', data);
+    });
+    // 寝るモード
+    socket.on('neru', function(data) {
+        console.log('neru event');
+        io.sockets.emit('neru', data);
     });
 
     socket.on('disconnect', function(){
