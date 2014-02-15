@@ -38,10 +38,12 @@ $(function() {
         },
         path: "/images/",
         preload: function() {
-            for (var i in ImageManager.images) {
-                var img = document.createElement("img");
-                img.src = ImageManager.path + ImageManager.images[i];
-            }
+            $(window).on("load", function() {
+                for (var i in ImageManager.images) {
+                    var img = document.createElement("img");
+                    img.src = ImageManager.path + ImageManager.images[i];
+                }
+            });
         },
         show: function(cmd) {
             $("#imgArea").attr("src", ImageManager.path + ImageManager.images[cmd]);
@@ -63,8 +65,7 @@ $(function() {
             $("#imgList")
                 .html(html)
                 .css({
-                        "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)",
-                        "opacity" : 1
+                        "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
                     });
         },
         slide: function(cmd) {
@@ -80,8 +81,8 @@ $(function() {
             pos = $(window).width() * i;
 
             $("#imgList").css({
-                    "-webkit-transform" : "translate(-" + pos + "px, 0px)",
-                });
+                "-webkit-transform" : "translate(-" + pos + "px, 0px)",
+            });
         }
     };
 
