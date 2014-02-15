@@ -22,7 +22,18 @@ $(function(){
       base: "sounds/BaseA.mp3",
       hguitar: "sounds/high_guitar_a.mp3",
       piano: "sounds/a_piano.wav",
+      chor: "sounds/a_chor.wav",
+      sax: "sounds/a_sax.wav",
+      mar: "sounds/a_mar.wav",
   };
+  var soundSpec = {
+    sax:{v:3, oct:1},
+    mar:{v:3, oct:1},
+    chor:{v:1, oct:1},
+    piano:{v:3, oct:1},
+    hguitar:{v:0.5, oct:0},
+    base:{v:0.5, oct:0},
+  }
   var soundBuffers;
   var soundPattern = {
     rain: [
@@ -384,10 +395,10 @@ $(function(){
     'b': 11,
   };
   // とりあえずスコアを作ってみる
-
+/*
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0, drumType: "araya", theme: 'sunny'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny', meloIns:'piano'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -398,7 +409,7 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy'},
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy', baseIns:'chor', meloIns:'mar'},
     {root:'d',scale: 'M', base:1},
     {root:'c',scale: 'M', base:0},
     {root:'b',scale:'m', base:3},
@@ -408,7 +419,7 @@ $(function(){
     {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
  
     // alarm
-    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm'},
+    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm', baseIns:'base', meloIns:'piano'},
     {root:'b',scale: 'M7', base:1},
     {root:'e',scale: 'm', base:0},
     {root:'g',scale: 'M', base:3},
@@ -417,12 +428,43 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep',meloIns:'piano', baseIns:'chor'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
     {root:'f',scale: 'M', base:0},
     {root:'d',scale:'m7', base:0},
+    {root:'g',scale: 'M7', base:0},
+    {root:'c',scale: 'M', base:0, speed: 1000 * 60/(120/4*8*4), drumType: "rib"},
+  ];
+*/
+  var chordScore = [
+    // sunny
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny', meloIns:'piano'},
+    {root:'a',scale: 'm', base:0},
+    {root:'f',scale: 'M', base:0},
+    {root:'g',scale: 'M', base:0},
+    {root:'c',scale: 'M', base:0},
+    {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
+
+    // rainy
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy', baseIns:'chor', meloIns:'mar'},
+    {root:'c',scale: 'M', base:0},
+    {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
+ 
+    // alarm
+    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm', baseIns:'base', meloIns:'piano'},
+    {root:'b',scale: 'M7', base:1},
+    {root:'e',scale: 'm', base:0},
+    {root:'g',scale: 'M', base:3},
+    {root:'c',scale: 'M', base:0},
+    {root:'d',scale: 'M', base:0},
+    {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
+  
+    // sleep
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep',meloIns:'piano', baseIns:'chor'},
+    {root:'a',scale: 'm', base:0},
+    {root:'f',scale: 'M', base:0},
     {root:'g',scale: 'M7', base:0},
     {root:'c',scale: 'M', base:0, speed: 1000 * 60/(120/4*8*4), drumType: "rib"},
   ];
@@ -577,6 +619,9 @@ $(function(){
   root = 0;  // 今のrootのmagic index
   nowChord = null; // 今のスコア
 
+  baseIns = 'base';  // baseの楽器
+  meloIns = 'piano';  // meloの楽器
+
   function ngTone(n){
     //return (n%7 == 1 || n%7 == 5); // okinawa
     //return (n%7 == 3 || n%7 == 6); // japanese
@@ -598,9 +643,11 @@ $(function(){
     function tick(){
       var currentTime = context.currentTime;
       if(t % 32 == 0){  // 小節？
+        mpos = 0;
+        rpos = 0;
         if(cpos > chordScore.length){
-	  return; // 終了
-	}
+          return; // 終了
+        }
         nowChord = chordScore[cpos];
         console.log(nowChord);
         root = randint(baseMagic.length);
@@ -611,18 +658,26 @@ $(function(){
 
 
         if(nowChord.theme){
-	  themeCallback(nowChord.theme);
-	}
+          themeCallback(nowChord.theme);
+        }
+
+        if(nowChord.baseIns){
+          baseIns = nowChord.baseIns;
+        }
+ 
+        if(nowChord.meloIns){
+          meloIns = nowChord.meloIns;
+        }
+
         if(nowChord.speed){
           targetSpeed = nowChord.speed;
         }
         if (nowChord.drumType) {
           drumType = nowChord.drumType;
         }
-	melodyRythm = choice(melodyBank);
-	guitarMelody = choice(guitarMelodyBank);
-	baseMelody = choice(baseMelodyBank);
-	console.log(baseMelody);
+        melodyRythm = choice(melodyBank);
+        guitarMelody = choice(guitarMelodyBank);
+        baseMelody = choice(baseMelodyBank);
       }
 
       if (t % 4 === 0) {
@@ -644,11 +699,11 @@ $(function(){
 	  n8.noteOff(0);
 	}
         if(n9)n9.noteOff(0);
-        v = 1;
+        v = 0.5;
         if(rpos == 0 || baseMelody[rpos - 1].tone != baseMelody[rpos].tone){
           var cs = chord[nowChord.scale];
         //setTimeout(function(){
-          n8 = oscTone(tone[n + cs[baseMelody[rpos].tone]] * 2, v, 0, 'base');
+          n8 = oscTone(tone[n + cs[baseMelody[rpos].tone]] * (1 << soundSpec[baseIns].oct), soundSpec[baseIns].v, 0, baseIns);
         //},0);
 	}
 
@@ -658,7 +713,7 @@ $(function(){
         //  GUITAR
         // ====================
  
-	v = 4;
+	v = 1;
  
         var cs = chord[nowChord.scale];
         // todo:回転指定の処理
@@ -695,10 +750,10 @@ $(function(){
         // ====================
  
         if(restToneLen == 0){
-          if(n5)n5.noteOff(currentTime + 3);
+          if(n5)n5.noteOff(currentTime + 0.1);
           if(n6)n6.noteOff(0);
           if(n7)n7.noteOff(0);
-          var v = 10;
+          var v = 5;
           var tn = 0;
           var cs = chord[nowChord.scale];
           if(Math.random() > 0.9 || true){ // きもいのでこれで
@@ -716,7 +771,7 @@ $(function(){
             tn = randint(7) + n;
           }
           //setTimeout(function(){
-            n5 = oscTone(tone[tn] * 2, v, 0, 'piano');
+            n5 = oscTone(tone[tn]*(1<<soundSpec[meloIns].oct) , soundSpec[meloIns].v, 0, meloIns);
           //},0);
           //n6 = oscTone(tone[tn] * 4, v, 0);
           //n7 = oscTone(tone[tn] * 8, v, 0);
@@ -741,7 +796,7 @@ $(function(){
         }
       }
 
-      playDrumsPattern(t, drumType);
+      //playDrumsPattern(t, drumType);
 
       t ++;
       setTimeout(tick, speed);
@@ -758,7 +813,7 @@ $(function(){
         source = context.createBufferSource();
 
     source.buffer = buffer;
-    source.gain.value = 0.05;
+    source.gain.value = 0.01;
     source.connect(context.destination);
     source.noteOn(0.0);
     source.noteOff(context.currentTime + 0.1);
