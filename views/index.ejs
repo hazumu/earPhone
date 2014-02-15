@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=320, initial-scale=1, minimum-scale=1, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<!--<meta name="apple-mobile-web-app-status-bar-style" content="black">-->
-
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<link rel='stylesheet' href='/stylesheets/bootstrap-responsive.css' />
+<link rel='stylesheet' href='/stylesheets/common.css' />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="javascripts/BufferLoader.js"></script>
 <script>
@@ -335,7 +336,28 @@ $(function(){
 
 <body>
 
-<button id="start">START</button>
+<div class="wrapper container-fluid">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">earPhone</a>
+        </div>
+        </div>
+    </div>
 
+    <!-- .row-fluid START -->
+    <div class="row-fluid">
+        <img id="imgArea" src="" alt="">
+        <button id="start">START</button>
+        <div class="debug">
+            <div id="connectId"></div>
+            <div id="type"></div>
+            <div id="hostName"><%= hostName %></div>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/main.js"></script>
 </body>
 </html>
