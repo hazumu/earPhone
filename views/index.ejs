@@ -1,24 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=320, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--<meta name="apple-mobile-web-app-status-bar-style" content="black">-->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+$(function(){
+  var context = new webkitAudioContext();
+  function oscTone(freq, vol){
+      if(vol == undefined){
+        vol = 1;
+      }
+      var oscillator = context.createOscillator();
+      eg = context.createGainNode();
+      //eg.gain.linearRampToValueAtTime(1, 0.1);
+      oscillator.connect(eg);
+      eg.connect(context.destination);
+      //console.log(eg);
+
+      oscillator.type = 1;
+      oscillator.frequency.value = freq;
+      //oscillator.connect(context.destination);
+      oscillator.noteOn(0);
+
+     var t0 = context.currentTime;
+     //eg.gain.value= 0;
+     eg.gain.setValueAtTime(1, t0);
+     eg.gain.linearRampToValueAtTime(0.3, t0 + 0.5);
+     return oscillator
+  }
+  var baseTone = [  // 半音の周波数
+    261.62,  // C   0
+    277.18,  // C#  1
+    293.66,  // D   2
+    311.12,  // D#  3
+    329.62,  // E   4
+    349.22,  // F   5
+    369.99,  // F#  6
+    391.99,  // G   7
+    415.30,  // G#  8
+    440.00,  // A   9
+    466.16,  // A#  10
+    493.88   // B   11
+  ];
+  var baseMagic = [ // 全音のスケール
+    0, 2, 4, 5, 7, 9, 11
+  ];
+  // 4オクターブ分のスケールを用意
+  var magic = [
+    0, 2, 4, 5, 7, 9, 11,
+    12,14,16,17,19,21,23,
+    24,26,28,29,31,33,35,
+    36,38,40,41,43,45,47,
+  ];
+  // 和音の構成音（半音ベース）
+  var chord = {
+    'M':[0,4,7],
+    'M7':[0,4,7,11],
+    'm':[0,3,7],
+    'm7':[0,3,7,11]
+  };
+  // 音名と配列indexの対応(半音ベース)
+  var toneNameMap = {
+    'c': 0,
+    'd': 2,
+    'e': 4,
+    'f': 5,
+    'g': 7,
+    'a': 9,
+    'b': 11,
+  };
+  // とりあえずスコアを作ってみる
+
+  var chordScore = [
+    // sunny
+    {root:'c',scale: 'M', base:0},
+    {root:'g',scale: 'M', base:1},
+    {root:'a',scale: 'm', base:0},
+    {root:'a',scale:'m7', base:3},
+    {root:'f',scale: 'M', base:0},
+    {root:'d',scale:'m7', base:0},
+    {root:'g',scale: 'M', base:0},
+    {root:'c',scale: 'M', base:0},
+    {root:'b',scale:'M7', base:0},
+
+    // rainy
+    {root:'e',scale: 'm', base:0},
+    {root:'d',scale: 'M', base:1},
+    {root:'c',scale: 'M', base:0},
+    {root:'b',scale:'m', base:3},
+    {root:'b',scale: 'M7', base:0},
+    {root:'e',scale:'m', base:0},
+    {root:'c',scale: 'M', base:0},
+    {root:'d',scale: 'M7', base:0},
+ 
+    // alarm
+    {root:'g',scale: 'M', base:0},
+    {root:'b',scale: 'M7', base:1},
+    {root:'e',scale: 'm', base:0},
+    {root:'g',scale: 'M', base:3},
+    {root:'c',scale: 'M', base:0},
+    {root:'d',scale: 'M', base:0},
+    {root:'g',scale: 'M7', base:0},
+  
+    // sleep
+    {root:'c',scale: 'M', base:0},
+    {root:'g',scale: 'M', base:1},
+    {root:'a',scale: 'm', base:0},
+    {root:'a',scale:'m7', base:3},
+    {root:'f',scale: 'M', base:0},
+    {root:'d',scale:'m7', base:0},
+    {root:'g',scale: 'M7', base:0},
+    {root:'c',scale: 'M', base:0},
+  ];
+
+  // 4オクターブ分の周波数生成
+  var tone = [];
+  for(var i =0; i < 12;i ++){
+    tone[i] = baseTone[i] /2;
+  }
+  for(var i =0; i < 12;i ++){
+    tone[i + 12] = baseTone[i];
+  }
+  for(var i =0; i < 12;i ++){
+    tone[i + 12] = baseTone[i]*2;
+  }
+  for(var i =0; i < 12;i ++){
+    tone[i + 12] = baseTone[i]*4;
+  }
+
+
+  // 0 - (n-1)
+  function randint(n){
+    var r = Math.floor(Math.random() * n);
+    return r;
+  }
+
+
+  // オシレーター
+  n1 = null;  // chord1
+  n2 = null;  // chord2
+  n3 = null;  // chord3
+  n4 = null;  // chord4
+  n5 = null;  // melody
+
+  t = 0;  // タイマー
+  root = 0;  // 今のrootのmagic index
+  nowChord = null; // 今のスコア
+
+  function ngTone(n){
+    //return (n%7 == 1 || n%7 == 5); // okinawa
+    //return (n%7 == 3 || n%7 == 6); // japanese
+    return false;
+  }
+  
+  // chordScore上の位置
+  cpos = 0;
+
+  $('#start').click(function(){
+    setInterval(function(){
+      if(t % 8 == 0){  // 小節？
+        nowChord = chordScore[cpos];
+        console.log(nowChord);
+        if(n1){n1.noteOff(0);n1 = null;}
+        if(n2){n2.noteOff(0);n2 = null;}
+        if(n3){n3.noteOff(0);n3 = null;}
+        if(n4){n4.noteOff(0);n4 = null;}
+
+        root = randint(baseMagic.length);
+        var v = 0.3;
+        var n;
+
+        n = toneNameMap[nowChord.root];
+        var cs = chord[nowChord.scale];
+        // 回転指定の処理
+        n1 = oscTone(tone[(n + cs[0]%7)] * 2, v);
+        n2 = oscTone(tone[(n + cs[1]%7)] * 2, v);
+        n3 = oscTone(tone[(n + cs[2]%7)] * 2, v);
+        if(cs.length >= 4)n4 = oscTone(tone[(n + cs[3])%7], v); // 7th
+
+        cpos ++;
+        if(cpos >= chordScore.length){
+          cpos = 0;
+        }
+
+ 
+      }
+      if(n5)n5.noteOff(0);
+      var v = 0.5;
+      var n = 0;
+      var cs = chord[nowChord.scale];
+      while(true){
+        n = cs[randint(cs.length)];
+        if(ngTone(n)){
+          continue; // 1-D,  5-A
+        }
+        break;
+      }
+      n5 = oscTone(tone[baseMagic[n%7]] * 2, v);
+
+      t ++;
+
+    }, 1000/4)
+  });
+
+});
+
+</script>
+<style>
+
+</style>
+
 <body>
-<div class="ui-container">
-   <h1>earhPhone</h1>
-</div>
 
-<div class="debug">
-    <div id="connectId"></div>
-    <div id="type"></div>
-    <div id="hostName"><%= hostName %></div>
-</div>
+<button id="start">START</button>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/javascripts/main.js"></script>
 </body>
 </html>
