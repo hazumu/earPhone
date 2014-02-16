@@ -134,6 +134,11 @@ body {
     position: relative;
 }
 
+.row-fluid {
+    position: relative;
+    height: 100%;
+}
+
 .btnWrap {
     position: absolute;
     top: 50%;
@@ -266,3 +271,4 @@ body {
 #imgWrap li {
     list-style: none;
 }
+
