@@ -398,7 +398,7 @@ $(function(){
 /*
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny', meloIns:'piano'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'natsu', meloIns:'piano'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -409,7 +409,7 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy', baseIns:'chor', meloIns:'mar'},
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'ame', baseIns:'chor', meloIns:'mar'},
     {root:'d',scale: 'M', base:1},
     {root:'c',scale: 'M', base:0},
     {root:'b',scale:'m', base:3},
@@ -419,7 +419,7 @@ $(function(){
     {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
  
     // alarm
-    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm', baseIns:'base', meloIns:'piano'},
+    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'yotei', baseIns:'base', meloIns:'piano'},
     {root:'b',scale: 'M7', base:1},
     {root:'e',scale: 'm', base:0},
     {root:'g',scale: 'M', base:3},
@@ -428,7 +428,7 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep',meloIns:'piano', baseIns:'chor'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'neru',meloIns:'piano', baseIns:'chor'},
     {root:'g',scale: 'M', base:1},
     {root:'a',scale: 'm', base:0},
     {root:'a',scale:'m7', base:3},
@@ -440,7 +440,7 @@ $(function(){
 */
   var chordScore = [
     // sunny
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sunny', meloIns:'piano'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'natsu', meloIns:'piano'},
     {root:'a',scale: 'm', base:0},
     {root:'f',scale: 'M', base:0},
     {root:'g',scale: 'M', base:0},
@@ -448,12 +448,12 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'rainy', baseIns:'chor', meloIns:'mar'},
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'ame', baseIns:'chor', meloIns:'mar'},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
  
     // alarm
-    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'alarm', baseIns:'base', meloIns:'piano'},
+    {root:'g',scale: 'M', base:0, drumType: "araya", theme: 'yotei', baseIns:'base', meloIns:'piano'},
     {root:'b',scale: 'M7', base:1},
     {root:'e',scale: 'm', base:0},
     {root:'g',scale: 'M', base:3},
@@ -462,7 +462,7 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'sleep',meloIns:'piano', baseIns:'chor'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'neru',meloIns:'piano', baseIns:'chor'},
     {root:'a',scale: 'm', base:0},
     {root:'f',scale: 'M', base:0},
     {root:'g',scale: 'M7', base:0},
@@ -838,6 +838,7 @@ $(function(){
   function themeCallback(theme){
     // 
     console.log('theme callback ' + theme);
+    window.ImageManager.slide(theme);
   }
 });
 </script>

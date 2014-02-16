@@ -77,7 +77,8 @@ $(function() {
             setTimeout(function() {
                 $("#imgList")
                     .css({
-                            "-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
+                            //"-webkit-transform" : "translate(-" + nextX * 3 + "px, 0px)"
+                            "-webkit-transform" : "translate(-0px, 0px)"
                         });
             }, 500);
         },
@@ -91,7 +92,8 @@ $(function() {
                 i++;
             }
 
-            pos = $(window).width() * i;
+            //pos = $(window).width() * i;
+            pos = $("#imgList").width() * i;
 
             $("#imgList").css({
                 "-webkit-transform" : "translate(-" + pos + "px, 0px)",
@@ -149,5 +151,7 @@ $(function() {
     };
 
     app.init();
+    window.ImageManager = ImageManager;
+
 });
 
