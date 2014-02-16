@@ -25,14 +25,17 @@ $(function(){
       chor: "sounds/a_chor.wav",
       sax: "sounds/a_sax.wav",
       mar: "sounds/a_mar.wav",
+      orc: "sounds/a_orc.wav",
+      po: "sounds/a_p_o.mp3",
   };
   var soundSpec = {
     sax:{v:3, oct:1},
     mar:{v:3, oct:1},
-    chor:{v:1, oct:1},
+    chor:{v:1.5, oct:1},
     piano:{v:3, oct:1},
     hguitar:{v:0.5, oct:0},
-    base:{v:0.5, oct:0},
+    base:{v:1.5, oct:0},
+    po:{v:3, oct:0},
   }
   var soundBuffers;
   var soundPattern = {
@@ -448,7 +451,7 @@ $(function(){
     {root:'b',scale:'M7', base:0, speed: 1000 * 60/(90/4*8*4), drumType: "filet"},
 
     // rainy
-    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'ame', baseIns:'chor', meloIns:'mar'},
+    {root:'e',scale: 'm', base:0, drumType: "rain", theme: 'ame', baseIns:'chor', meloIns:'piano'},
     {root:'c',scale: 'M', base:0},
     {root:'d',scale: 'M7', base:0, speed: 1000 * 60/(180/4*8*4), drumType: "filet"},
  
@@ -462,7 +465,7 @@ $(function(){
     {root:'g',scale: 'M7', base:0, speed: 1000 * 60/(60/4*8*4), drumType: "filet"},
   
     // sleep
-    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'neru',meloIns:'piano', baseIns:'chor'},
+    {root:'c',scale: 'M', base:0, drumType: "basic", theme: 'neru',meloIns:'po', baseIns:'chor'},
     {root:'a',scale: 'm', base:0},
     {root:'f',scale: 'M', base:0},
     {root:'g',scale: 'M7', base:0},
@@ -813,7 +816,7 @@ $(function(){
         source = context.createBufferSource();
 
     source.buffer = buffer;
-    source.gain.value = 0.01;
+    source.gain.value = 0.05;
     source.connect(context.destination);
     source.noteOn(0.0);
     source.noteOff(context.currentTime + 0.1);
