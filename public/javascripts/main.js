@@ -133,7 +133,7 @@ $(function() {
     var app = {
         isStart : false,
         init : function() {
-            socket.init();
+            // socket.init();
             startBtn.init();
             ImageManager.preload();
             $(window).on(socket.ON_SOCKET_DATA, function(e, data) {
