@@ -146,9 +146,9 @@ body {
 	position: relative;
 	width: 131px;
 	height: 131px;
-    background: url(/images/start.png) no-repeat 0 0;
-    -webkit-background-size: 131px 131px;
-    background-size: 131px 131px;
+    background: url(/images/button.png) no-repeat 0 0px;
+    -webkit-background-size: 131px 262px;
+    background-size: 131px 262px;
     border: none;
 }
 
@@ -156,9 +156,9 @@ body {
 	position: relative;
 	width: 131px;
 	height: 131px;
-    background: url(/images/stop.png) no-repeat 0 0;
-    -webkit-background-size: 131px 131px;
-    background-size: 131px 131px;
+    background: url(/images/button.png) no-repeat 0 -131px;
+    -webkit-background-size: 131px 262px;
+    background-size: 131px 262px;
     border: none;
 }
 
