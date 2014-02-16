@@ -147,6 +147,7 @@ body {
     margin-top: -60px;
 }
 
+/*
 #start{
 	position: relative;
 	width: 131px;
@@ -166,8 +167,8 @@ body {
     background-size: 131px 262px;
     border: none;
 }
+*/
 
-/*
 #start{
 	position: relative;
 	width: 180px;
@@ -175,14 +176,19 @@ body {
 	border-radius: 90px;
 	border: none;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-	background:linear-gradient(#f3f3f3, #e6e6e6);
+	background:rgba(255,255,255,.8);
 	margin: 15px 0;
 	outline:none;
+	color:rgb(100,236,118);
 }
-#start:active {
-	background:linear-gradient(to top,#e9e9e9, #d3d3d3);
-	box-shadow: 0 3px 1px rgba(0, 0, 0, 0.4) inset;
-	padding-top:2px;
+#start:before {
+	content:"START";
+	display: block;
+	line-height:180px;
+	width: 180px;
+	height: 180px;
+	font-size:28px;
+	text-align: center;
 }
 #start:after {
 	display: block;
@@ -193,15 +199,17 @@ body {
 	width: 160px;
 	height: 160px;
 	border-radius: 80px;
-	border: 3px solid #ccc;
+	border: 3px solid rgb(100,236,118);
 }
-#start:active:after {
-	top:8px;
+#start.on {
+	color: #fe7074;
 }
 #start.on:after {
-	border-color: rgb(100,236,118);
+	border-color: #fe7074;
 }
-*/
+#start.on:before {
+	content:"■ STOP";
+}
 
 #start.down {
     -webkit-transition: -webkit-transform 0.4s ease-in;  
