@@ -247,8 +247,7 @@ body {
 }
 #imgWrap {
     width: 320px;
-    height: 200px;
-    overflow: hidden;
+    overflow-x: hidden;
     margin: 0 auto;
 }
 

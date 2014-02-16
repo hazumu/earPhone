@@ -31,10 +31,10 @@ $(function() {
 
     var ImageManager = {
         images: {
-                natsu: "natsu.jpg",
-                ame:   "ame.jpg",
+                natsu: "summer1.png",
+                ame:   "rain1.png",
                 yotei: "yotei.jpg",
-                neru:  "neru.jpg"
+                neru:  "night1.png"
         },
         path: "/images/",
         preload: function() {
