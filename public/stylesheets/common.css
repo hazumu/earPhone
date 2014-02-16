@@ -5,6 +5,7 @@ body {
 	height: 100%;
 	padding-top: 60px;
 	color: #444;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .navbar-inner {
@@ -137,10 +138,31 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-left: -90px;
-    margin-top: -90px;
+    margin-left: -60px;
+    margin-top: -60px;
 }
 
+#start{
+	position: relative;
+	width: 131px;
+	height: 131px;
+    background: url(/images/start.png) no-repeat 0 0;
+    -webkit-background-size: 131px 131px;
+    background-size: 131px 131px;
+    border: none;
+}
+
+#start.on {
+	position: relative;
+	width: 131px;
+	height: 131px;
+    background: url(/images/stop.png) no-repeat 0 0;
+    -webkit-background-size: 131px 131px;
+    background-size: 131px 131px;
+    border: none;
+}
+
+/*
 #start{
 	position: relative;
 	width: 180px;
@@ -174,6 +196,7 @@ body {
 #start.on:after {
 	border-color: rgb(100,236,118);
 }
+*/
 
 #start.down {
     -webkit-transition: -webkit-transform 0.4s ease-in;  

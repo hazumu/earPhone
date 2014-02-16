@@ -112,7 +112,6 @@ $(function() {
                     $(this)
                          .addClass("on down")
                          .removeClass("up")
-                         .html("STOP")
                          .on("webkitTransitionEnd", function(){
                             ImageManager.render();
                          });
@@ -120,7 +119,6 @@ $(function() {
                     $(this)
                          .removeClass("on down")
                          .addClass("up")
-                         .html("START")
                          .on("webkitTransitionEnd", function(){
                             ImageManager.clear();
                          });
