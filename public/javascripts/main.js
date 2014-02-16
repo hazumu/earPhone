@@ -33,7 +33,7 @@ $(function() {
         images: {
                 natsu: "summer1.png",
                 ame:   "rain1.png",
-                yotei: "yotei.jpg",
+                yotei: "train1.png",
                 neru:  "night1.png"
         },
         path: "/images/",
